@@ -1,0 +1,38 @@
+/* product details */
+.container.product {
+  height: calc(100vh - 176px);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); 
+  z-index: 1000; 
+}
+
+.product-details {
+  position: fixed;
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  z-index: 1001;
+  width: 80%; 
+  max-width: 600px;
+  background: white;
+  border: 1px solid black;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.product-details.scrollable-div {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ccc; 
+  padding: 10px;
+  background-color: #f8f9fa; 
+}
+
+/* product details */

@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %} 
+<div class="container position-relative product d-flex justify-content-center align-items-center">
+    <div class="row">
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{ product.image.url }}" class="img-fluid rounded-start">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <!-- <p class="card-text">{{ description }}</p> -->
+                        {% if product.is_sale %}
+                        <div class="small text-warning mb-2">
+                            <i class="bi bi-star-fill"></i>
+                            &nbsp;&nbsp;Sale&nbsp;&nbsp;
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                        <p class="card-text">
+                            <small class="text-body-secondary">
+                                <strong>Giá:</strong> <strike class="text-danger">{{ price }} đ</strike>&nbsp;&nbsp;{{ sale_price }} đ     
+                            </small>
+                        </p>
+                        {% else %}
+                        <p class="card-text"><small class="text-body-secondary"><strong>Giá:</strong> {{ price }} đ</small></p>
+                        {% endif%}
+                        <button id="toggleDetails" class="btn btn-primary">Xem Chi Tiết</button>
+                        <div id="overlay" class="overlay" style="display: none;"></div>
+                        <div id="productDetails" class="product-details scrollable-div" style="display: none;">
+                            <h3>Thông Tin Sản Phẩm</h3>
+                            <img src="{{ product.image.url }}" class="img-fluid rounded-start">
+                            <p><strong>Tên sản phẩm:</strong> {{ product.name }}</p>
+                            <strong>Mô tả:</strong>
+                            <ul class="d-flex flex-column">
+                            {% for des in description %}
+                                <li> {{ des }}</li>
+                            {% endfor%}
+                            </ul>
+                            <div class="d-flex justify-content-center">
+                                <button id="closeDetails" class="btn btn-secondary">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const toggleButton = document.getElementById("toggleDetails");
+    const productDetails = document.getElementById("productDetails");
+    const closeButton = document.getElementById("closeDetails");
+    const overlay = document.getElementById("overlay");
+
+    toggleButton.addEventListener("click", function() {
+        if (productDetails.style.display === "none") {
+            productDetails.style.display = "block"; 
+            overlay.style.display = "block";
+        } else {
+            productDetails.style.display = "none"; 
+            overlay.style.display = "none";
+        }
+    });
+
+    closeButton.addEventListener("click", function() {
+        productDetails.style.display = "none";
+        overlay.style.display = "none";
+    });
+});
+</script>
+
+{% endblock %}
