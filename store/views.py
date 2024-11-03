@@ -1,11 +1,17 @@
 from django.shortcuts import render, redirect
-from .models import Product
+from .models import Product, Category
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 from .forms import SignUpForm
-from django import forms
+
+def category(request, foo):
+    try:
+        category = Category.objects.get(name=foo)
+        products = Product.objects.filter(category=category)
+        return render(request, 'category.html', {'products':products, 'category':category})
+    except:
+        messages.success("That category don' exits...")
+        return redirect('home')
 
 def product(request, pk):
     product = Product.objects.get(id=pk)
@@ -15,7 +21,6 @@ def product(request, pk):
     return render(request, 'product.html', 
         {'product':product, 'description':description, 'price':price, 'sale_price':sale_price}
     )
-
 
 def home(request):
     products = Product.objects.all()
