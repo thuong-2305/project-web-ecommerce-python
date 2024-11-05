@@ -17,9 +17,19 @@ def product(request, pk):
     product = Product.objects.get(id=pk)
     price = f"{product.price:,}"
     sale_price = f"{product.sale_price:,}"
-    description = product.description.split(" -")
+    description = product.description.split("    ")
+    config = product.config.split("- ")
+    processed_config =[
+        {parts[0]: [{kv.split(": ")[0]: kv.split(": ")[1]} for kv in parts[1:] if ": " in kv]}
+        for con in config if con
+        for parts in [con.split(" + ")]]
+                    
     return render(request, 'product.html', 
-        {'product':product, 'description':description, 'price':price, 'sale_price':sale_price}
+        {'product':product, 
+         'description':description, 
+         'price':price, 
+         'sale_price':sale_price,
+         'config':processed_config}
     )
 
 def home(request):

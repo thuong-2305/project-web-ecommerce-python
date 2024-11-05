@@ -26,8 +26,10 @@ class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.DecimalField(default=0, decimal_places=0, max_digits=20)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
-    description = models.CharField(max_length=1000, default='', blank=True, null=True)
+    description = models.CharField(max_length=10000, default='', blank=True, null=True)
     image = models.ImageField(upload_to='uploads/product/')
+    #configure
+    config = models.CharField(max_length=10000, default='', blank=True, null=True)
     #sale
     is_sale = models.BooleanField(default=False)
     sale_price = models.DecimalField(default=0, decimal_places=0, max_digits=20)

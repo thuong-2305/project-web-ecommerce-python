@@ -1,0 +1,64 @@
+.icon-hover:hover {
+    background-color: white !important;
+    color: #3b71ca !important;
+}
+
+.icon-hover:hover i {
+    color: #3b71ca !important;
+}
+
+.btn:hover {
+    background-color: #688BB3;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn {
+    background-color: #5874A5;
+    color: white;
+    border: none;
+}
+
+.content-limited {
+    max-height: 300px; /* Giới hạn chiều cao */
+    overflow: hidden;  /* Ẩn nội dung vượt quá chiều cao */
+    position: relative; /* Thiết lập vị trí tương đối */
+}
+
+.content-limited::after {
+    content: ""; /* Tạo một phần tử giả */
+    position: absolute; /* Đặt nó tuyệt đối trong khối cha */
+    bottom: 0; /* Đặt ở đáy của khối */
+    left: 0; /* Bắt đầu từ bên trái */
+    right: 0; /* Kéo dài đến bên phải */
+    height: 100px; /* Chiều cao của gradient */
+    background: linear-gradient(to bottom,transparent, white); /* Gradient từ trắng đến trong suốt */
+    pointer-events: none; /* Không cho phép tương tác với phần tử này */
+}
+
+.hidden {
+    display: none;     /* Ẩn nội dung khi không cần thiết */
+}
+
+#toggleContent {
+    display: block;              /* Hiển thị nút như một khối */
+    margin: 20px auto;          /* Căn giữa nút */
+    padding: 10px 20px;         /* Thêm khoảng cách bên trong */
+    background-color: transparent; /* Nền trong suốt */
+    color: blue;                /* Màu chữ xanh */
+    border: none;               /* Không có đường viền */
+    cursor: pointer;            /* Con trỏ khi di chuột là con trỏ bấm */
+    font-size: 16px;            /* Kích thước chữ */
+}
+
+.nav-link-1{
+    margin-top: 20px;
+    text-decoration: none;
+}
+
+.comment-list {
+    list-style-type: none; /* Loại bỏ chấm tròn */
+    padding: 0;
+    margin-top: 10px;
+}
+
