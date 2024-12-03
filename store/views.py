@@ -4,6 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm
 
+def category_summary(request):
+    categories = Category.objects.all()
+    products = Product.objects.all()
+    return render(request, 'category_summary.html', {'categories':categories, 'products':products})
+
 def category(request, foo):
     try:
         category = Category.objects.get(name=foo)

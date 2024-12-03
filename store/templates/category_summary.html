@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Categories</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Choose category your below...</p> 
+        </div>
+    </div>
+</header>
+
+<div class="container my-5">
+    <div class="row">
+        <!-- Category 1 -->
+        {% for category in categories %}
+        <div class="col-md-4 my-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <h6>Sản phẩm: {{ category }}</h6>
+                    <a href="{% url 'category' category %}" class="btn btn-primary">See more</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

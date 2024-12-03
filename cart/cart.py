@@ -17,12 +17,15 @@ class Cart():
     def add(self, product, quantity):
         product_id = str(product.id)
         product_qty = str(quantity)
+        msg = ""
         if product_id in self.cart:
-            pass
+            msg = "Sản phẩm đã có trong giả hàng" 
         else:
             self.cart[product_id] = int(product_qty)
+            msg = "Thêm vào giỏ hàng thành công" 
 
         self.session.modified = True
+        return msg
 
     def __len__(self):
         return len(self.cart)

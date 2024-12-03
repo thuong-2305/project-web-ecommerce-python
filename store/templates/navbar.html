@@ -1,6 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container px-4 px-lg-5">
-        <a class="navbar-brand" href="{% url 'home' %}">Laptop&Device</a>
+    <div class="container ">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <span class="text-decoration-underline">L</span>aptop<span class="text-primary">&</span>Device
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
@@ -9,7 +11,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="{% url 'home' %}">All products</a></li>
+                        <li><a class="dropdown-item" href="{% url 'category_summary' %}">All Categories</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="{% url 'category' 'dell' %}">Laptop dell</a></li>
                         <li><a class="dropdown-item" href="{% url 'category' 'keyboard' %}">Keyboard</a></li>
@@ -19,18 +21,26 @@
                     </ul>
                 </li>
             </ul>
-            <form class="d-flex">
+            <div class="d-flex">
                 {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="btn btn-outline-dark me-2">logout</a>                
+                <a href="{% url 'logout' %}" class="btn btn-outline-dark me-3">logout</a>                
                 {% else %}
-                <a href="{% url 'login' %}" class="btn btn-outline-dark me-2">login</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-dark me-3">login</a>
                 {% endif %}
+                <a href="#" class="btn btn-ouline-dark me-3"><i class="bi bi-heart-fill me-2"></i>Wishlist</a>
                 <a href="{% url 'cart_summary' %}" class="btn btn-outline-dark" type="submit">
                     <i class="bi-cart-fill me-1"></i>
                     Cart
                     <span class="badge bg-dark text-white ms-1 rounded-pill" id="cart_quantity">{{ cart|length }}</span>
                 </a>
-            </form>
+                <a href="#" class="ms-3 d-flex justify-content-center align-items-center text-decoration-none text-dark">
+                    <i class="bi bi-person-circle me-2" 
+                        style="font-size: 25px;
+                        color: #000">
+                    </i>
+                    user1
+                </a>
+            </div>
         </div>
     </div>
 </nav>

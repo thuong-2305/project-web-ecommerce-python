@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
 from .cart import Cart
 from store.models import Product
 from django.http import JsonResponse
@@ -17,15 +18,17 @@ def cart_add(request):
         #get stuff
         product_id = int(request.POST.get('product_id'))
         product_qty = int(request.POST.get('product_qty'))
+        
         #lookup product in db
         product = get_object_or_404(Product, id=product_id)
         #save to session
-        cart.add(product=product, quantity=product_qty)
+        msg = cart.add(product=product, quantity=product_qty)
+
         #get cart quantity
         cart_quantity = cart.__len__()
-
+        
         #return reponse
-        response = JsonResponse({'qty': cart_quantity})
+        response = JsonResponse({'qty': cart_quantity, 'msg': msg})
         return response
 
 

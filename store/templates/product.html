@@ -48,6 +48,7 @@
                 <!-- thumbs-wrap.// -->
                 <!-- gallery-wrap .end// -->
             </aside>
+            <div id="notification" class="notification hidden"></div>
             <main class="col-lg-6">
                 <div class="ps-lg-3">
                     <h4 class="title text-dark">
@@ -191,23 +192,9 @@
                     </div>
                     <!--                    nút xem thêm-->
                     <button id="toggleContent">Xem thêm</button>
-                    <script>
-                        document.getElementById('toggleContent').addEventListener('click', function () {
-                            const content = document.getElementById('content');
-                            const isLimited = content.classList.toggle('content-limited');
-
-                            if (isLimited) {
-                                this.textContent = 'Xem thêm';
-                            } else {
-                                this.textContent = 'Thu gọn';
-                            }
-                        });
-                    </script>
                 </div>
             </div>
             <!--Các sản phẩm khác-->
-
-
 
             <div class="col-lg-4">
                 <div class="px-0 border rounded-2 shadow-0">
@@ -322,7 +309,6 @@
                                         5 sao cộng và chúc các bạn được nhiều sức khoẻ và được nhiều khách hàng yêu quý.
                                     </div>
                                 </div>
-
                             </li>
                         </ul>
                     </div>
@@ -333,6 +319,23 @@
 </section>
 
 <script>
+    function showNotification(message, duration = 5000) {
+        const notification = document.getElementById('notification');
+
+        // Cập nhật nội dung thông báo
+        notification.textContent = message;
+
+        // Hiển thị thông báo
+        notification.classList.remove('hidden');
+        notification.classList.add('visible');
+
+        // Tự động ẩn sau thời gian đã định
+        setTimeout(() => {
+            notification.classList.remove('visible');
+            notification.classList.add('hidden');
+        }, duration);
+    }
+
     $(document).ready(function() {
         $('#button-addon1').on('click', function() {
             let currentValue = parseInt($('#quantity-input').val())
@@ -357,18 +360,24 @@
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
             },
-
             success: function(json) {
-                console.log(json)
-                document.getElementById('cart_quantity')
-                    .textContent = json.qty  
+                location.reload()
+                showNotification(json.msg);
             },
-
-            error: function(xhr, errmsg, err) {
-                
-            }
         })
     })
+</script>
+<script>
+    document.getElementById('toggleContent').addEventListener('click', function () {
+        const content = document.getElementById('content');
+        const isLimited = content.classList.toggle('content-limited');
+
+        if (isLimited) {
+            this.textContent = 'Xem thêm';
+        } else {
+            this.textContent = 'Thu gọn';
+        }
+    });
 </script>
 
 {% endblock %}
