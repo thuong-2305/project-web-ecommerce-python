@@ -40,6 +40,8 @@ def cart_delete(request):
         cart.delete(product=product_id)
 
         response = JsonResponse({'product':product_id}) 
+
+        messages.success(request, ("Đã xóa thành công..."))
         return response
 
 def cart_update(request):
@@ -52,6 +54,7 @@ def cart_update(request):
         cart.update(product=product_id, quantity=product_qty)
 
         response = JsonResponse({'qty':product_qty}) 
+        messages.success(request, ("Đã update số lượng thành công..."))
         return response
         # return redirect('cart_summary')
 

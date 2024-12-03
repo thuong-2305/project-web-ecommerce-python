@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Update profile</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Update user profile</p>
+        </div>
+    </div>
+</header>
+<!-- Section-->
+<!-- <section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <form method="post" action="{% url 'register' %}"
+            class="sign-up-form d-flex align-items-center justify-content-center flex-column py-5 overflow-hidden">
+            {% csrf_token %}
+            
+            {{ user_form }}
+            <button type="submit" class="btn btn-secondary">Update profile</button>
+        </form>
+    </div>
+</section> -->
+
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <form method="post" action="{% url 'register' %}">
+                            {% csrf_token %}
+
+                            <!-- Username Field -->
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="id_username" class="form-label fw-semibold">Username</label>
+                                {{ user_form.username }}
+                            </div>
+
+                            <!-- First Name Field -->
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="id_first_name" class="form-label fw-semibold">First Name</label>
+                                {{ user_form.first_name }}
+                            </div>
+
+                            <!-- Last Name Field -->
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="id_last_name" class="form-label fw-semibold">Last Name</label>
+                                {{ user_form.last_name }}
+                            </div>
+
+                            <!-- Email Field -->
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="id_email" class="form-label fw-semibold">Email Address</label>
+                                {{ user_form.email }}
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Update Profile</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
