@@ -12,7 +12,7 @@
     </div>
 </header>
 <br>
-<div class="container">
+<!-- <div class="container">
     {% if cart_products %}
     {% for product in cart_products %}
     <div class="container d-flex justify-content-center align-items-center">
@@ -25,7 +25,6 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">{{ product.name }}</h5>
-                            <!-- <p class="card-text">{{ description }}</p> -->
                             {% if product.is_sale %}
                             <div class="small text-warning mb-2">
                                 <i class="bi bi-star-fill"></i>
@@ -34,22 +33,23 @@
                             </div>
                             <p class="card-text">
                                 <small class="text-body-secondary">
-                                    <strong>Giá:</strong> 
-                                        <strike class="text-danger">{{ product.price|floatformat:0|intcomma }} đ</strike>&nbsp;&nbsp;
-                                        {{ product.sale_price|floatformat:0|intcomma }} đ
+                                    <strong>Giá:</strong>
+                                    <strike class="text-danger">{{ product.price|floatformat:0|intcomma }}
+                                        đ</strike>&nbsp;&nbsp;
+                                    {{ product.sale_price|floatformat:0|intcomma }} đ
                                 </small>
                             </p>
                             {% else %}
-                            <p class="card-text"><small class="text-body-secondary"><strong>Giá:</strong> 
-                                {{ product.price|floatformat:0|intcomma }} đ</small></p>
+                            <p class="card-text"><small class="text-body-secondary"><strong>Giá:</strong>
+                                    {{ product.price|floatformat:0|intcomma }} đ</small></p>
                             {% endif%}
                             <br>
                             {% for key, value in quantities.items %}
                             {% if key == product.id|slugify %}
                             <p class="card-text">
                                 <small class="text-body-secondary">
-                                <strong>Số lượng:</strong> <input type="text" value="{{ value }}"
-                                    id="input{{ product.id }}"> 
+                                    <strong>Số lượng:</strong> <input type="text" value="{{ value }}"
+                                        id="input{{ product.id }}">
                                 </small>
                                 <button type="button" data-index="{{ product.id }}"
                                     class="btn btn-secondary update-cart" style="background-color: #212529">Cật nhật SL
@@ -58,9 +58,10 @@
                             {% endif %}
                             {% endfor %}
                             <br>
-                            <a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">Xem chi tiết</a>
-                            <button type="button" data-index="{{ product.id }}"
-                                class="btn btn-danger delete-product" style="background-color:tomato">Xóa
+                            <a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">Xem chi
+                                tiết</a>
+                            <button type="button" data-index="{{ product.id }}" class="btn btn-danger delete-product"
+                                style="background-color:tomato">Xóa
                             </button>
                         </div>
                     </div>
@@ -75,8 +76,163 @@
         <p class="text-center">There's Nothing In Your Cart...</p>
     </div>
     {% endif %}
+</div> -->
+
+<div class="container-fluid cart-container">
+    <div class="cart-wrapper">
+        <div class="row">
+            {% if cart_products %}
+            <div class="col-sm-8">
+
+                <form action="" class="cart-form">
+                    <table class="table shop-table table-cart">
+                        <thead>
+                            <tr>
+                                <th class="product-name text-style-col text-dark fw-bold">Product</th>
+                                <th class="product-price text-style-col text-dark fw-bold">Price</th>
+                                <th class="product-quantity text-style-col text-dark fw-bold">Quantity</th>
+                                <th class="product-subtotal text-style-col text-dark fw-bold">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Item 1 -->
+
+                            {% for product in cart_products %}
+                            <tr class="cart-item">
+                                <td class="product-remove"><a href=""></a></td>
+                                <td class="product-thumbnail"><a href=""></a></td>
+                                <!-- Product name -->
+                                <td class="product-name">
+                                    <!-- <th scope="row"></th> -->
+                                    <div class="media cart-item-product-detail d-flex justify-content-start align-items-center">
+                                        <a href="">
+                                            <img class="image-style" src="{{ product.image.url }}" alt="">
+                                        </a>
+                                        <div class="media-body align-self-center">
+                                            <a class="text-style-product-item text-decoration-none" href="">{{ product.name }}</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <!-- Product price -->
+                                <td class="product-price align-middle">
+                                    <span class="price-amount font-weight-bold">
+                                        <span class="currencySymbol"></span>{{ product.price|floatformat:0|intcomma }}</span>
+                                </td>
+
+                                <!-- Quantity -->
+                                {% for key, value in quantities.items %}
+                                {% if key == product.id|slugify %}
+                                <td class="product-quantity align-middle">
+                                    <small class="text-body-secondary">
+                                        <input type="text" value="{{ value }}"
+                                            id="input{{ product.id }}" class="py-1 rouded-pill">
+                                    </small>
+                                    <button type="button" data-index="{{ product.id }}"
+                                        class="btn btn-secondary update-cart" style="background-color: #212529">Cật nhật SL
+                                    </button>
+                                </td>
+                                {% endif %}
+                                {% endfor %}
+                                <!-- Subtotal  -->
+                                <td class="product-subtotal align-middle">
+                                    <button type="button" data-index="{{ product.id }}"
+                                        class="btn btn-danger delete-product" style="background-color:tomato">Xóa
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            <!-- Coupon -->
+                            <!-- <tr>
+                                <div class="coupon">
+                                    <label for="coupon_code"></label>
+                                    <input class="p-12" type="text" name="coupon" id="coupon-code"
+                                        placeholder="Coupon code">
+                                    <button class="btn-apply-coupon btn btn-primary p-12 rounded" type="submit"
+                                        name="apply_coupon" value="Apply coupon">Apply coupon</button>
+                                </div>
+                            </tr> -->
+                        </tbody>
+                    </table>
+                </form>
+
+            </div>
+            <div class="col-sm-4">
+                <div class="cart-total-container">
+                    <div class="cart-total p-40">
+                        <h2>Cart totals</h2>
+                        <table class="shop-table-total w-100">
+                            <tbody>
+                                <tr class="cart-subtotal">
+                                    <th>Subtotal</th>
+                                    <td data-title="Subtotal">
+                                        <span class="price-amount font-weight-bold">
+                                            <span class="currencySymbol text-right">{{ totals|floatformat:0|intcomma }}
+                                                đồng</span>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="shipping-total">
+                                    <th class="w-100 dp-tbrow">Delivery</th>
+                                    <td data-title="Shipping" class="w-100 dp-tbrow txt-align-left">
+                                        <ul class="ul-none ps-0" id="shipping-method">
+                                            <li>
+                                                <input type="radio" name="shipping_method[0]" data-index="0"
+                                                    id="shipping_method_0_flat_rate1" value="flat_rate:1"
+                                                    class="shipping_method" checked="checked">
+                                                <label for="shipping_method_0_flat_rate1">Normal: <span
+                                                        class="woocommerce-Price-amount amount"><bdi><span
+                                                                class="woocommerce-Price-currencySymbol"></span>0
+                                                            đồng</bdi></span></label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" name="shipping_method[0]" data-index="0"
+                                                    id="shipping_method_0_flat_rate2" value="flat_rate:2"
+                                                    class="shipping_method">
+                                                <label for="shipping_method_0_flat_rate2">Express: <span
+                                                        class="woocommerce-Price-amount amount"><bdi><span
+                                                                class="woocommerce-Price-currencySymbol"></span>500.000
+                                                            đồng</bdi></span></label>
+                                            </li>
+                                        </ul>
+                                        <p class="shipping-destination">Shipping to <strong>Vietnam</strong>.</p>
+
+                                    </td>
+                                </tr>
+                                <tr class="order-total">
+                                    <th>Total</th>
+                                    <td data-title="Total" class="order-total-content">
+                                        <strong>
+                                            <span class="woocommerce-Price-amount amount">
+                                                <span class="currencySymbol">$</span>{{ totals|floatformat:0|intcomma }}
+                                                đồng
+                                            </span>
+                                        </strong>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                        <!-- Process checkout -->
+                        <div class="proceed-checkout">
+                            <form action="" class="shipping-calculator text-decoration-none">
+                                <a href="" class="checkout-button text-decoration-none">Proceed to checkout</a>
+                                <a href="" class="back-to-shopping text-decoration-none">Back to shopping</a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div style="height: calc(100vh - 176px);">
+                <p class="text-center">There's Nothing In Your Cart...</p>
+            </div>
+            {% endif %}
+
+        </div>
+
+    </div>
 </div>
-<!-- Section-->
 
 
 <script>

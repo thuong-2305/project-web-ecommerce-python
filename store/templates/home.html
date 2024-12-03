@@ -1,12 +1,26 @@
 {% extends 'base.html' %}
+{% load humanize %}
 
 {% block content %}
 <!-- Header-->
 <header class="bg-dark py-5">
-    <div class="container px-4 px-lg-5 my-5">
+    <!-- <div class="container px-4 px-lg-5 my-5">
         <div class="text-center text-white">
             <h1 class="display-4 fw-bolder">Shop in style</h1>
             <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
+        </div>
+    </div> -->
+    <div class="banner">
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="banner-content">
+                <h1 class="banner-title text-white">New Tech Gift</h1>
+                <p class="banner-description  text-white">Discover the latest gadgets and tech gifts for everyone!</p>
+                <a href="#" class="btn btn-outline-primary">Shop Now</a>
+                <p class="small-text text-white mt-4">Limited time offer!</p>
+            </div>
+            <div class="image-container ms-3">
+                <img src="../../static/assets/Banner-Slider.png" alt="Tech Gift" style="width:300px; height: 300px">
+            </div>
         </div>
     </div>
 </header>
@@ -17,7 +31,7 @@
             {% for product in products %}
             {% if product.is_sale %}
             <div class="col mb-5">
-                <div class="card h-100">
+                <div class="card h-70">
                     <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale
                     </div>
                     <!-- Product image-->
@@ -26,16 +40,10 @@
                     <div class="card-body p-4">
                         <div class="text-center">
                             <!-- Product name-->
-                            <h5 class="fw-bolder">{{ product.name }}</h5>
-                            <!-- Sale -->
-                            <div class="d-flex justify-content-center small text-warning mb-2">
-                                <i class="bi bi-star-fill"></i>
-                                &nbsp;&nbsp;Sale&nbsp;&nbsp;
-                                <i class="bi bi-star-fill"></i>
-                            </div>
+                            <h5 class="fw-semibold text-secondary">{{ product.name }}</h5>
                             <!-- Product price-->
-                            <strike>{{ product.price }}đ</strike> <br>
-                            {{ product.sale_price }}
+                            <strike class="">{{ product.price|floatformat:0|intcomma }} đ</strike> <br>
+                            <span class="text-primary fw-bold fs-5">{{ product.sale_price|floatformat:0|intcomma }} đ</span>
                         </div>
                     </div>
                     <!-- Product actions-->
@@ -46,16 +54,16 @@
             </div>
             {% else %}
             <div class="col mb-5">
-                <div class="card h-100">
+                <div class="card h-70">
                     <!-- Product image-->
                     <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
                     <!-- Product details-->
                     <div class="card-body p-4">
                         <div class="text-center">
                             <!-- Product name-->
-                            <h5 class="fw-bolder">{{ product.name }}</h5>
+                            <h5 class="fw-semibold text-secondary">{{ product.name }}</h5>
                             <!-- Product price-->
-                            {{ product.price }}đ
+                            <span class="text-primary fw-bold fs-5">{{ product.price|floatformat:0|intcomma }} đ</span>
                         </div>
                     </div>
                     <!-- Product actions-->
