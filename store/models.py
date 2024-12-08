@@ -36,6 +36,26 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_discounted_price(self):
+        active_sales = SaleEvent.objects.filter(
+            category=self.category,
+            start_date__lte=datetime.now(),
+            end_date__gte=datetime.now()
+        ).order_by('-discount_percentage')  # Nếu có nhiều giảm giá lấy cái nào giảm nhiều nhất
+
+        if active_sales.exists():
+            sale = active_sales.first()
+            discounted_price = self.price * (1 - sale.discount_percentage / 100)
+
+            self.sale_price = discounted_price
+            self.is_sale = True
+            self.save()
+
+            return discounted_price
+
+        # Nếu không có đợt giảm giá, trả về giá gốc và sale_price vẫn bằng 0 trong csdl
+        return self.price
+
 #Customer order
 class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -48,4 +68,20 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.product}'
+
+#SaleEvent
+class SaleEvent(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    def __str__(self):
+        return f"Sale for {self.category.name} ({self.discount_percentage}%)"
+
+    def is_active(self):
+        """Kiểm tra đợt giảm giá còn hiệu lực không."""
+        now = datetime.now()
+        return self.start_date <= now <= self.end_date
+
+
 

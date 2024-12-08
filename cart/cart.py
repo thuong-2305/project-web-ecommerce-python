@@ -45,6 +45,11 @@ class Cart():
                     else:
                         total += product.price*val
 
+        # shipping_method = request.POST.get('shipping_method', 'normal')
+        #
+        # # Thêm phí giao hàng nếu chọn Express
+        # if shipping_method == 'express':
+        #     total += 500_000
         return total
 
     
