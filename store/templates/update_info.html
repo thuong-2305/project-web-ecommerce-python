@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Add Information</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Update your information...</p>
+        </div>
+    </div>
+</header>
+<!-- Section-->
+<section class="pb-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <form method="post" action="{% url 'update_info' %}"
+            class="sign-up-form d-flex align-items-center justify-content-center flex-column py-5 overflow-hidden">
+            {% csrf_token %}
+            
+            {{ form.phone }}
+            <br>
+            <div class="my-3"></div>
+            <br>
+            {{ form.address }}
+            
+            <button type="submit" class="btn btn-secondary mt-3">Add info</button>
+        </form>
+    </div>
+</section>
+
+
+{% endblock %}

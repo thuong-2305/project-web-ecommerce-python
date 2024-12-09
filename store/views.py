@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
-from .models import Product, Category
+
+from cart.cart import Cart
+from .models import Product, Category, Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 from django.contrib.auth.models import User
 from django.db.models import Q
+import json
 
 
 def search(request):
@@ -18,6 +21,21 @@ def search(request):
         return render(request, "search.html", {"searched" : searched})
     else:
         return render(request, "search.html", {})
+    
+def update_info(request):
+    if request.user.is_authenticated:
+        current_user = Profile.objects.get(user__id=request.user.id)
+        form = UserInfoForm(request.POST or None, instance=current_user)
+    
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Update thành công...")
+            return redirect('home')
+        return render(request, 'update_info.html', {'form':form})
+    
+    else:
+        messages.success(request, 'Bạn phải đăng nhập trước...')
+        return redirect('home')
 
 def update_password(request):
     if request.user.is_authenticated:
@@ -51,11 +69,13 @@ def update_user(request):
             user_form.save()
 
             login(request, current_user)
-            messages.success(request, "Update thàn công...")
+            messages.success(request, "Update thành công...")
             return redirect('home')
         return render(request, 'update_user.html', {'user_form':user_form})
 
-    return render(request, 'update_user.html', {})
+    else:
+        messages.success(request, 'Bạn phải đăng nhập trước...')
+        return redirect('home')
 
 def category_summary(request):
     categories = Category.objects.all()
@@ -105,6 +125,21 @@ def login_user(request):
         error = ''
         if user is not None:
             login(request, user)
+
+            # Do some shopping cart stuff
+            current_user = Profile.objects.get(user__id=request.user.id)
+            # Get their saved cart from database
+            save_cart = current_user.old_cart
+            if save_cart:
+                # Convert dictionary using JSON
+                converted_cart = json.loads(save_cart)
+                # Add the loaded cart dictionary to our session
+                # Get the cart
+                cart = Cart(request)
+                # Loop through the cart and add the items from the database
+                for key, value in converted_cart.items():
+                    cart.db_add(product=key, quantity=value)
+
             messages.success(request, ('Bạn đã đăng nhập thành công.'))
             return redirect('home')
         else:

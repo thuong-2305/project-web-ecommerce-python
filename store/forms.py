@@ -1,6 +1,16 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django import forms
+from .models import Profile
+
+class UserInfoForm(forms.ModelForm):
+	phone = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'style':'width:40%', 'placeholder':'Phone number'}), required=False)
+	address = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'style':'width:40%', 'placeholder':'Address'}), required=False)
+
+	class Meta:
+		model = Profile
+		fields = ('phone', 'address')
+
 
 class ChangePasswordForm(SetPasswordForm):
 	current_password = forms.CharField(
