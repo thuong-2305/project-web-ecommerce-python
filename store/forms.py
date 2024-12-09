@@ -1,6 +1,37 @@
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, SetPasswordForm
 from django import forms
+
+class ChangePasswordForm(SetPasswordForm):
+	current_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'style': 'width: 40%; margin-bottom: 15px',
+            'placeholder': 'Current password'
+        }),
+        label="Current Password",
+        required=True
+    )
+
+	class Meta:
+		model = User
+		fields = ['current_password', 'new_password1', 'new_password2']
+
+	def __init__(self, *args, **kwargs):
+		self.user = kwargs.pop('user')  # Lấy user hiện tại
+		super(ChangePasswordForm, self).__init__(self.user, *args, **kwargs)
+
+		self.fields['new_password1'].widget.attrs['style'] = 'width: 40%'
+		self.fields['new_password1'].widget.attrs['placeholder'] = 'New password'
+
+		self.fields['new_password2'].widget.attrs['style'] = 'width: 40%'
+		self.fields['new_password2'].widget.attrs['placeholder'] = 'Confirm new password'
+
+	def clean_current_password(self):
+		current_password = self.cleaned_data.get('current_password')
+		if not self.user.check_password(current_password):
+			raise forms.ValidationError("Current password is incorrect.")
+		return current_password
+
 
 class UpdateUserForm(UserChangeForm):
 	email = forms.EmailField(label="", widget=forms.TextInput(attrs={'placeholder':'Email Address'}))
