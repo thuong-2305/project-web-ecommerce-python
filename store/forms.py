@@ -4,8 +4,8 @@ from django import forms
 from .models import Profile
 
 class UserInfoForm(forms.ModelForm):
-	phone = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'style':'width:40%', 'placeholder':'Phone number'}), required=False)
-	address = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'style':'width:40%', 'placeholder':'Address'}), required=False)
+	phone = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'style':'width:100%', 'placeholder':'Phone number'}), required=False)
+	address = forms.CharField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'style':'width:100%', 'placeholder':'Address'}), required=False)
 
 	class Meta:
 		model = Profile

@@ -16,13 +16,55 @@
         <form method="post" action="{% url 'update_info' %}"
             class="sign-up-form d-flex align-items-center justify-content-center flex-column py-5 overflow-hidden">
             {% csrf_token %}
-            
-            {{ form.phone }}
+            <!-- {{ form.phone }}
             <br>
             <div class="my-3"></div>
             <br>
-            {{ form.address }}
-            
+            {{ form.address }} -->
+            <div class="accordion w-50" id="accordionExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button fw-bold" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Infomation
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <p class="mb-2 fw-semibold">Phone</p>
+                            {{ form.phone }}
+                            <br>
+                            <p class="mb-2 fw-semibold">Address</p>
+                            {{ form.address }}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Shipping Information
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="accordion-body">
+                                <p class="mb-2 fw-semibold">Full Name</p>
+                                {{ shipping_form.shipping_full_name }}
+                                <br>
+                                <p class="mb-2 fw-semibold">Phone</p>
+                                {{ shipping_form.shipping_phone }}
+                                <br>
+                                <p class="mb-2 fw-semibold">Address</p>
+                                {{ shipping_form.shipping_address }}
+                                <br>
+                                <p class="mb-2 fw-semibold">State</p>
+                                {{ shipping_form.shipping_state }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <button type="submit" class="btn btn-secondary mt-3">Add info</button>
         </form>
     </div>

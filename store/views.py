@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect
-
-from cart.cart import Cart
-from .models import Product, Category, Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 from django.contrib.auth.models import User
 from django.db.models import Q
+
+from cart.cart import Cart
+
+from payment.forms import ShippingForm
+from payment.models import ShippingAddress
+
+from .models import Product, Category, Profile
+from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
 import json
 
 
@@ -24,14 +28,21 @@ def search(request):
     
 def update_info(request):
     if request.user.is_authenticated:
+        # Lấy thông tin user hiện tại
         current_user = Profile.objects.get(user__id=request.user.id)
+        # Lấy thông tin vận chuyển của user hiện tại
+        shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
+
         form = UserInfoForm(request.POST or None, instance=current_user)
-    
-        if form.is_valid():
+        shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
+
+        if form.is_valid() or shipping_form.is_valid():
             form.save()
+            shipping_form.save()
+
             messages.success(request, "Update thành công...")
             return redirect('home')
-        return render(request, 'update_info.html', {'form':form})
+        return render(request, 'update_info.html', {'form':form, 'shipping_form':shipping_form})
     
     else:
         messages.success(request, 'Bạn phải đăng nhập trước...')
