@@ -4,24 +4,39 @@
 {% block content %}
 <!-- Header-->
 <header class="bg-dark py-5">
-    <!-- <div class="container px-4 px-lg-5 my-5">
-        <div class="text-center text-white">
-            <h1 class="display-4 fw-bolder">Shop in style</h1>
-            <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
-        </div>
-    </div> -->
     <div class="banner">
-        <div class="container d-flex justify-content-center align-items-center">
-            <div class="banner-content">
-                <h1 class="banner-title text-white">New Tech Gift</h1>
-                <p class="banner-description  text-white">Discover the latest gadgets and tech gifts for everyone!</p>
-                <a href="#" class="btn btn-outline-primary">Shop Now</a>
-                <p class="small-text text-white mt-4">Limited time offer!</p>
+        {% if discounted_categories %}
+            <div class="discount mt-4 p-3 bg-light text-dark rounded shadow w-100 text-center">
+                <h3 class="discount-title text-danger">Special Discounts</h3>
+                <div class="row justify-content-center">
+                    {% for category in discounted_categories %}
+                        <div class="col-md-4 mb-3">
+                            <div class="discount-category bg-danger text-white p-3 rounded">
+                                <h5 class="category-name">{{ category.name }}</h5>
+                                <p class="small-text">Shop now and save big on {{ category.name }} items!</p>
+                                <a href="{% url 'category' category %}" class="btn btn-light">View
+                                    Deals</a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="image-container ms-3">
-                <img src="../../static/assets/Banner-Slider.png" alt="Tech Gift" style="width:300px; height: 300px">
-            </div>
+        {% else %}
+            <p>No special discounts available at the moment.</p>
+        {% endif %}
+    </div>
+    <div class="container d-flex justify-content-center align-items-center">
+        <div class="banner-content">
+            <h1 class="banner-title text-white">New Tech Gift</h1>
+            <p class="banner-description  text-white">Discover the latest gadgets and tech gifts for
+                everyone!</p>
+            <a href="#" class="btn btn-outline-primary">Shop Now</a>
+            <p class="small-text text-white mt-4">Limited time offer!</p>
         </div>
+        <div class="image-container ms-3">
+            <img src="../../static/assets/Banner-Slider.png" alt="Tech Gift" style="width:300px; height: 300px">
+        </div>
+    </div>
     </div>
 </header>
 <!-- Section-->

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -9,8 +9,9 @@ from cart.cart import Cart
 from payment.forms import ShippingForm
 from payment.models import ShippingAddress
 
-from .models import Product, Category, Profile
+from .models import Product, Category, Profile, SaleEvent
 from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from datetime import datetime
 import json
 
 
@@ -123,7 +124,20 @@ def product(request, pk):
 
 def home(request):
     products = Product.objects.all()
-    return render(request, 'home.html', {'products':products})
+
+    # Lấy các sự kiện giảm giá còn hiệu lực
+    active_sales = SaleEvent.objects.filter(
+        start_date__lte=datetime.now(),
+        end_date__gte=datetime.now()
+    )
+    # Lấy danh sách các category được giảm giá
+    discounted_categories = [sale.category for sale in active_sales]
+    context = {
+        'products':products,
+        'discounted_categories': discounted_categories,
+    }
+
+    return render(request, 'home.html', context)
 
 def about(request):
     return render(request, 'about.html', {})
@@ -181,3 +195,17 @@ def register_user(request):
             return render(request, 'register.html', {'form':form, 'errors':errors})
     else:        
         return render(request, 'register.html', {'form':form})
+
+# Cho vao ham home 
+# def show_discount(request):
+#     # Lấy các sự kiện giảm giá còn hiệu lực
+#     active_sales = SaleEvent.objects.filter(
+#         start_date__lte=datetime.now(),
+#         end_date__gte=datetime.now()
+#     )
+#     # Lấy danh sách các category được giảm giá
+#     discounted_categories = [sale.category for sale in active_sales]
+#     context = {
+#         'discounted_categories': discounted_categories,
+#     }
+#     return render(request, 'home.html', context)
