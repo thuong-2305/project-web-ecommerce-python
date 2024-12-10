@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect
-from .models import Product, Category
+from datetime import datetime
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Product, Category, SaleEvent
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm, UpdateUserForm
@@ -99,3 +100,28 @@ def register_user(request):
             return render(request, 'register.html', {'form':form, 'errors':errors})
     else:        
         return render(request, 'register.html', {'form':form})
+
+
+
+
+
+def show_discount(request):
+    # Lấy các sự kiện giảm giá còn hiệu lực
+    active_sales = SaleEvent.objects.filter(
+        start_date__lte=datetime.now(),
+        end_date__gte=datetime.now()
+    )
+
+    # In ra thông tin active_sales để kiểm tra
+    print("Active Sales:", active_sales)
+
+    # Lấy danh sách các category được giảm giá
+    discounted_categories = [sale.category for sale in active_sales]
+
+    # In ra danh sách các category giảm giá
+    print("Discounted Categories:", discounted_categories)
+
+    context = {
+        'discounted_categories': discounted_categories,
+    }
+    return render(request, 'home.html', context)
