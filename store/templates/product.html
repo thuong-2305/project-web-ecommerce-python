@@ -72,7 +72,14 @@
                     <div class="mb-3">
                         <span class="h5">
                             <i class="fa-solid fa-dong-sign fa-2xs"></i>
-                            {{ price }}
+                            <!-- {{ price }} -->
+                            {% load humanize %}
+                            {% if product.get_discounted_price != product.price %}
+                                <del>{{ product.price|floatformat:0|intcomma }}</del>
+                                {{ product.sale_price|floatformat:0|intcomma }}
+                            {% else %}
+                                {{ product.price|floatformat:0|intcomma }}
+                            {% endif %}
                         </span>
                     </div>
 

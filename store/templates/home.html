@@ -43,7 +43,8 @@
                             <h5 class="fw-semibold text-secondary">{{ product.name }}</h5>
                             <!-- Product price-->
                             <strike class="">{{ product.price|floatformat:0|intcomma }} đ</strike> <br>
-                            <span class="text-primary fw-bold fs-5">{{ product.sale_price|floatformat:0|intcomma }} đ</span>
+                            <!-- <span class="text-primary fw-bold fs-5">{{ product.sale_price|floatformat:0|intcomma }} đ</span> -->
+                            <span class="text-primary fw-bold fs-5">{{ product.get_discounted_price|floatformat:0|intcomma }} đ</span>
                         </div>
                     </div>
                     <!-- Product actions-->
