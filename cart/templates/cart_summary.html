@@ -115,8 +115,17 @@
                                 </td>
                                 <!-- Product price -->
                                 <td class="product-price align-middle">
+                                    {% if product.is_sale %}
                                     <span class="price-amount font-weight-bold">
-                                        <span class="currencySymbol"></span>{{ product.price|floatformat:0|intcomma }}</span>
+                                        <span class="currencySymbol"></span>
+                                        <strike>{{ product.price|floatformat:0|intcomma }}</strike>
+                                        {{ product.sale_price|floatformat:0|intcomma }}
+                                    </span>
+                                    {% else %}
+                                    <span class="price-amount font-weight-bold">
+                                        <span class="currencySymbol"></span>{{ product.price|floatformat:0|intcomma }}
+                                    </span>
+                                    {% endif %}
                                 </td>
 
                                 <!-- Quantity -->

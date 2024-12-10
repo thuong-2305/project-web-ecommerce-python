@@ -75,10 +75,10 @@
                             <!-- {{ price }} -->
                             {% load humanize %}
                             {% if product.get_discounted_price != product.price %}
-                                <del>{{ product.price|floatformat:0|intcomma }}</del>
-                                {{ product.sale_price|floatformat:0|intcomma }}
+                            <del>{{ product.price|floatformat:0|intcomma }}</del>
+                            {{ product.sale_price|floatformat:0|intcomma }}
                             {% else %}
-                                {{ product.price|floatformat:0|intcomma }}
+                            {{ product.price|floatformat:0|intcomma }}
                             {% endif %}
                         </span>
                     </div>
@@ -96,14 +96,9 @@
                                 data-mdb-ripple-color="dark">
                                 <i class="fas fa-minus"></i>
                             </button>
-                            <input 
-                                type="text" 
-                                class="form-control text-center border border-secondary" 
-                                placeholder="1"
-                                aria-label="Example text with button addon" 
-                                aria-describedby="button-addon1" 
-                                id="quantity-input" 
-                                value="1"/>
+                            <input type="text" class="form-control text-center border border-secondary" placeholder="1"
+                                aria-label="Example text with button addon" aria-describedby="button-addon1"
+                                id="quantity-input" value="1" />
                             <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon2"
                                 data-mdb-ripple-color="dark">
                                 <i class="fas fa-plus"></i>
@@ -113,17 +108,15 @@
                     </div>
                     <a href="#" class="btn btn-warning border border-secondary py-2 " style="background-color: #ff253a">
                         Mua ngay </a>
-                    <button 
-                        type="button" 
-                        value="{{ product.id }}"
-                        id="add-cart"
-                        class="btn btn-success border border-secondary py-2"
-                    >
+                    <button type="button" value="{{ product.id }}" id="add-cart"
+                        class="btn btn-success border border-secondary py-2">
                         <i class="me-1 fa fa-shopping-basket"> </i> Thêm vào giỏ hàng
                     </button>
-                    <a href="#" class="btn btn-light border border-secondary py-2 px-3">
+                    <!--nut them vao wish list-->
+                    <button type="button" value="{{ product.id }}" id="add-wishlist"
+                        class="btn btn-light border border-secondary py-2 px-3">
                         <i class="fa-regular fa-heart fa-beat-fade"></i>
-                    </a>
+                    </button>
                 </div>
             </main>
         </div>
@@ -343,20 +336,20 @@
         }, duration);
     }
 
-    $(document).ready(function() {
-        $('#button-addon1').on('click', function() {
+    $(document).ready(function () {
+        $('#button-addon1').on('click', function () {
             let currentValue = parseInt($('#quantity-input').val())
             if (currentValue > 1) {
                 $('#quantity-input').val(currentValue - 1);
             }
         })
-        $('#button-addon2').on('click', function() {
+        $('#button-addon2').on('click', function () {
             let currentValue = parseInt($('#quantity-input').val())
             $('#quantity-input').val(currentValue + 1)
         })
     })
 
-    $(document).on('click', '#add-cart', function(e) {
+    $(document).on('click', '#add-cart', function (e) {
         e.preventDefault();
         $.ajax({
             type: 'POST',
@@ -367,7 +360,7 @@
                 csrfmiddlewaretoken: '{{ csrf_token }}',
                 action: 'post'
             },
-            success: function(json) {
+            success: function (json) {
                 location.reload()
                 showNotification(json.msg);
             },
