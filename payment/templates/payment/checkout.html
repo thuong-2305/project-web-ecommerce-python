@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Checkout</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Review your order...</p>
+        </div>
+    </div>
+</header>
+<br>
+<div class="d-flex flex-row-reverse">
+<div class="container-fluid cart-container mb-5 mx-auto" style="width: 50%; float:right">
+    <div class="card border-0">
+        <div class="card-body px-5" style="background-color: #f9f9f9;">
+            <p class="fs-4 fw-semibold mb-3">Order Summary</p>
+            <hr>
+            <div class="d-flex justify-content-between pb-2">
+                <strong>Product</strong>
+                <strong>Price</strong>
+            </div>
+            <div style="font-size: 15px">
+            {% for product in cart_products %}
+            <div class="d-flex justify-content-between">
+                <div class="left">
+                <span class="fw-semibold">
+                {% for key, value in quantities.items %}
+                    {% if key == product.id|slugify %}
+                        {{ value }}
+                    {% endif %}
+                {% endfor %} <i class="bi bi-x"></i> </span>  
+                {{ product.name }}
+                </div>
+                <div class="right">
+                {% if product.is_sale %}
+                    {{ product.sale_price|floatformat:0|intcomma }}đ
+                {% else %}
+                    {{ product.price|floatformat:0|intcomma }}đ
+                {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            </div>
+            <a href="{% url 'cart_summary' %}" class="text-decoration-none text-primary update-order-cart" style="float: right">Update product</a>
+            <br>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <p class="mb-2">SubTotal</p>
+                <p data-title="Total" class="order-total-content mb-2">
+                    <strong>
+                        <span class="woocommerce-Price-amount amount">
+                            <span class="currencySymbol"></span>{{ totals|floatformat:0|intcomma }}đ                           
+                        </span>
+                    </strong>
+                </p>
+            </div>
+            <div>
+                <p class="mb-2">Shipping</p>
+                <ul class="ul-none ps-3" id="shipping-method">
+                    <li class="d-flex justify-content-between">
+                        <div class="left">
+                            <input type="radio" name="shipping_method[0]" data-index="0"
+                                id="shipping_method_0_flat_rate1" value="flat_rate:1"
+                                class="shipping_method" checked="checked">
+                            <label for="shipping_method_0_flat_rate1">Normal: </label>
+                        </div>
+                        <strong>
+                            <span class="woocommerce-Price-amount amount"><bdi>0đ</bdi></span>
+                        </strong>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                        <div class="left">
+                            <input type="radio" name="shipping_method[0]" data-index="0"
+                                id="shipping_method_0_flat_rate2" value="flat_rate:2"
+                                class="shipping_method">
+                            <label for="shipping_method_0_flat_rate2">Express: </label>
+                        </div>
+                        <strong>
+                            <span class="woocommerce-Price-amount amount"><bdi>500,000đ</bdi></span>
+                        </strong>
+                    </li>
+                </ul>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <p class="mb-0">Total</p>
+                <p data-title="Total" class="order-total-content mb-0">
+                    <strong>
+                        <span class="woocommerce-Price-amount amount">
+                            <span class="currencySymbol"></span>{{ totals|floatformat:0|intcomma }}đ                           
+                        </span>
+                    </strong>
+                </p>
+            </div>
+            <hr>
+            <button class="btn btn-primary rounded-pill w-100 py-2 fw-bold py-2" style="font-size: 19px;">Place order</button>
+        </div>
+    </div>
+</div>
+<div class="container-fluid cart-container mb-5 mx-auto" style="width: 60%; float: left">
+    <div class="card border-0">
+        <div class="card-body px-5">
+            <p class="fs-4 fw-semibold mb-3">Shipping Info</p>
+            <hr>
+            <p class="mb-2">Full Name<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
+            {{ shipping_form.shipping_full_name }}
+            <br>
+            <p class="mb-2">Phone<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
+            {{ shipping_form.shipping_phone }}
+            <br>
+            <p class="mb-2">Address<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
+            {{ shipping_form.shipping_address }}
+            <br>
+            <p class="mb-2">State</p>
+            {{ shipping_form.shipping_state }}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
