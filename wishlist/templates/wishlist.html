@@ -1,67 +1,64 @@
 {% extends 'base.html' %}
+{% load humanize %}
+
 {% block content %}
-<div class="cart-wrap">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="main-heading mb-10">My Wishlist</div>
-                <div class="table-wishlist">
-                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
-                        <thead>
+    <div class="cart-wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="main-heading mb-10">My Wishlist</div>
+                    <div class="table-wishlist">
+                        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                            <thead>
                             <tr>
                                 <th width="45%">Product Name</th>
                                 <th width="15%">Unit Price</th>
-                                <th width="15%">Stock Status</th>
                                 <th width="15%"></th>
                                 <th width="10%"></th>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {% for product in wishlist %}
-                            <tr>
-                                <td width="45%">
-                                    <div class="display-flex align-center">
-                                        <div class="img-product">
-                                            <img src="{{ product.image_url }}" alt="{{ product.name }}"
-                                                class="mCS_img_loaded">
-                                        </div>
-                                        <div class="name-product">
-                                            {{ product.name }}
-                                        </div>
-                                    </div>
-                                </td>
-                                <td width="15%" class="price">${{ product.price }}</td>
-                                <td width="15%">
-                                    {% if product.in_stock %}
-                                    <span class="in-stock-box">In Stock</span>
-                                    {% else %}
-                                    <span class="out-stock-box">Out of Stock</span>
-                                    {% endif %}
-                                </td>
-                                <td width="15%">
-                                    <form method="POST" action="{% url 'cart_add' product.id %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="round-black-btn small-btn">Add to Cart</button>
-                                    </form>
-                                </td>
-                                <td width="10%" class="text-center">
-                                    <form method="POST" action="{% url 'wishlist_remove' product.id %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="trash-icon btn btn-link"><i
-                                                class="far fa-trash-alt"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for product in wishlist_products %}
+                                <tr>
+<!-- {#                                    <td width="45%">#}
+{#                                        <div class="display-flex align-center">#}
+{#                                            <div class="name-product-product">#}
+{#                                                <img src="{{ product.image_url }}" alt="{{ product.name }}"#}
+{#                                                     class="mCS_img_loaded">#}
+{#                                            </div>#}
+{#                                            <div class="name-product">#}
+{#                                                {{ product.name }}#}
+{#                                            </div>#}
+{#                                        </div>#}
+{#                                    </td>#} -->
+                                    <td width="15%" class="price">{{ product.name }}</td>
+                                    <td width="15%" class="price">{{ product.price|floatformat:0|intcomma }} đồng</td>
+                                    <td width="15%">
+                                        <form method="POST" action="{% url 'wishlist_add' %}">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                                            <input type="hidden" name="product_price" value="{{ product.price }}">
+                                            <button type="submit" class="round-black-btn small-btn">Delete</button>
+                                        </form>
+                                    </td>
+<!-- {#                                    <td width="10%" class="text-center">#}
+{#                                        <form method="POST" action="{% url 'wishlist_remove' product.id %}">#}
+{#                                            {% csrf_token %}#}
+{#                                            <button type="submit" class="trash-icon btn btn-link"><i#}
+{#                                                    class="far fa-trash-alt"></i></button>#}
+{#                                        </form>#}
+{#                                    </td>#} -->
+                                </tr>
                             {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center">Your wishlist is empty.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="5" class="text-center">Your wishlist is empty.</td>
+                                </tr>
                             {% endfor %}
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
