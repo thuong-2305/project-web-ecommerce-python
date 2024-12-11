@@ -12,7 +12,27 @@
     </div>
 </header>
 <br>
-<div class="d-flex flex-row-reverse">
+<form class="d-flex" action="billing_info" method="post">
+<div class="container-fluid cart-container mb-5 mx-auto" style="width: 60%; float: left">
+    <div class="card border-0">
+        <div class="card-body px-5">
+            <p class="fs-4 fw-semibold mb-3">Shipping Info</p>
+            <hr>
+            {% csrf_token %}
+            <p class="mb-2">Full Name<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
+            {{ shipping_form.shipping_full_name }}
+            <br>
+            <p class="mb-2">Phone<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
+            {{ shipping_form.shipping_phone }}
+            <br>
+            <p class="mb-2">Address<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
+            {{ shipping_form.shipping_address }}
+            <br>
+            <p class="mb-2">State</p>
+            {{ shipping_form.shipping_state }}
+        </div>
+    </div>
+</div>
 <div class="container-fluid cart-container mb-5 mx-auto" style="width: 50%; float:right">
     <div class="card border-0">
         <div class="card-body px-5" style="background-color: #f9f9f9;">
@@ -96,28 +116,9 @@
                 </p>
             </div>
             <hr>
-            <button class="btn btn-primary rounded-pill w-100 py-2 fw-bold py-2" style="font-size: 19px;">Place order</button>
+            <button type="submit" class="btn btn-primary rounded-pill w-100 py-2 fw-bold py-2" style="font-size: 19px;">Place order</button>
         </div>
     </div>
 </div>
-<div class="container-fluid cart-container mb-5 mx-auto" style="width: 60%; float: left">
-    <div class="card border-0">
-        <div class="card-body px-5">
-            <p class="fs-4 fw-semibold mb-3">Shipping Info</p>
-            <hr>
-            <p class="mb-2">Full Name<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
-            {{ shipping_form.shipping_full_name }}
-            <br>
-            <p class="mb-2">Phone<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
-            {{ shipping_form.shipping_phone }}
-            <br>
-            <p class="mb-2">Address<span class="fw-semibold" style="color:tomato; font-size: 15px;">*</span></p>
-            {{ shipping_form.shipping_address }}
-            <br>
-            <p class="mb-2">State</p>
-            {{ shipping_form.shipping_state }}
-        </div>
-    </div>
-</div>
-</div>
+</form>
 {% endblock %}

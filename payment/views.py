@@ -1,8 +1,9 @@
-from django.shortcuts import render
-
+from django.shortcuts import redirect, render
+from django.contrib import messages
+from django.contrib.auth.models import User
 from cart.cart import Cart
-from payment.forms import ShippingForm
-from payment.models import ShippingAddress
+from payment.forms import PaymentForm, ShippingForm
+from payment.models import Order, ShippingAddress, OrderItem
 
 def payment_success(request):
     return render(request, 'payment/payment_success.html', {})
@@ -20,3 +21,85 @@ def checkout(request):
     else:
         shipping_form = ShippingForm(request.POST or None)
         return render(request, 'payment/checkout.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_form':shipping_form})
+
+
+def billing_info(request):
+    if request.POST:
+        cart = Cart(request)
+        cart_products = cart.get_prods 
+        quantities = cart.get_quants
+        totals = cart.total()
+
+        #  Create a session with Shipping info
+        my_shipping = request.POST
+        request.session['my_shipping'] = my_shipping
+
+        # Chech see if user logged in 
+        if request.user.is_authenticated:
+            # Get billing form 
+            billing_form = PaymentForm()
+            return render(request, 'payment/billing_info.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_info':request.POST, 'billing_form':billing_form})
+        else:
+            billing_form = PaymentForm()
+            shipping_form = ShippingForm(request.POST or None)
+            return render(request, 'payment/billing_info.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_form':shipping_form, 'billing_form':billing_form})
+    else:
+        messages.success(request, "Access Cancled")
+        return redirect('home')
+    
+def process_order(request):
+    if request.POST:
+        cart = Cart(request)
+        cart_products = cart.get_prods 
+        quantities = cart.get_quants
+        totals = cart.total()
+
+        # Get billing info from card 
+        payment_form = PaymentForm(request.POST or None)
+
+        # Get shipping Session data
+        my_shipping = request.session.get('my_shipping')
+
+        # Create Shipping info from session info
+        full_name = my_shipping['shipping_full_name']
+        phone = my_shipping['shipping_phone']
+        shipping_address = f"{my_shipping['shipping_address']}\n{my_shipping['shipping_state']}"
+        amount_paid = totals
+
+        if request.user.is_authenticated:
+            #logged in
+            user = request.user
+            # create Order 
+            create_order = Order(user=user, full_name=full_name, phone=phone, shipping_address=shipping_address, amount_paid=amount_paid)
+            create_order.save()
+
+            # Add order item
+            # Get order id
+            order_id = create_order.pk
+            # Get product id
+            for product in cart_products():
+                product_id = product.id
+                
+                if product.is_sale:
+                    price = product.sale_price
+                else:
+                    price = product.price
+
+                for key, value in quantities().items():
+                    if int(key) == product.id:
+                        create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
+                        create_order_item.save()
+
+            # Delete out of products cart when buyed
+            for key in list(request.session.keys()):
+                if key == 'session_key':
+                    del request.session[key]
+
+            messages.success(request, "Payment successful!")
+            return redirect('home')
+        else:
+            messages.success(request, "Please login or register to buy products...")
+            return redirect('home')
+    else:
+        messages.success(request, "Access Cancled")
+        return redirect('home')

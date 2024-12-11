@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<!-- Header-->
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Billing Infomation</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Review your billing information...</p>
+        </div>
+    </div>
+</header>
+<br>
+<div class="container-fluid cart-container mb-5 mx-auto" style="width: 50%;">
+    <div class="card">
+        <div class="card-body px-5">
+            <p class="fs-4 fw-semibold mb-3">Order Details</p>
+            <hr>
+            <div class="d-flex justify-content-between pb-2" style="font-size: 18px">
+                <p class="fw-semibold mb-0">PRODUCT</p>
+                <p class="fw-semibold mb-0">TOTAL</p>
+            </div>
+            <div style="height: 5px; width: 100%; background: #eee" class="mb-3"></div>
+            <div style="font-size: 15px">
+                {% for product in cart_products %}
+                <div class="d-flex justify-content-between">
+                    <div class="left">
+                        <span class="fw-semibold">
+                            {{ product.name }} <strong>
+                                <i class="bi bi-x"></i>
+                                {% for key, value in quantities.items %}
+                                {% if key == product.id|slugify %}
+                                {{ value }}
+                                {% endif %}
+                                {% endfor %}</strong></span>
+                    </div>
+                    <div class="right">
+                        {% if product.is_sale %}
+                        {{ product.sale_price|floatformat:0|intcomma }}đ
+                        {% else %}
+                        {{ product.price|floatformat:0|intcomma }}đ
+                        {% endif %}
+                    </div>
+                </div>
+                <hr>
+                {% endfor %}
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <strong>
+                    <p class="mb-0">SubTotal:</p>
+                </strong>
+                <p data-title="Total" class="order-total-content mb-0">
+                    <span class="woocommerce-Price-amount amount">
+                        <span class="currencySymbol"></span>{{ totals|floatformat:0|intcomma }}đ
+                    </span>
+                </p>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <span><strong>Shipping: </strong><small>&#40;via Normal Delivery&#41;</small></span>
+                <span class="woocommerce-Price-amount amount"><bdi>0đ</bdi></span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <strong>
+                    <p class="mb-0">Payment method:</p>
+                </strong>
+                <p data-title="Total" class="order-total-content mb-0">
+                    <span class="woocommerce-Price-amount amount">
+                        <span class="currencySymbol"></span>visa
+                    </span>
+                </p>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <strong>
+                    <p class="mb-0">Total:</p>
+                </strong>
+                <p data-title="Total" class="order-total-content mb-0">
+                    <span class="woocommerce-Price-amount amount">
+                        <span class="currencySymbol"></span>{{ totals|floatformat:0|intcomma }}đ
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card mb-5 mx-auto" style="width: 48%;">
+    <div class="card-body">
+        <p class="fs-4 fw-bold mb-3">Shipping Info</p>
+        <span class="mb-2">Full Name: </span>
+        {{ shipping_info.shipping_full_name }}
+        <br>
+        <span class="mb-2">Phone: </span>
+        {{ shipping_info.shipping_phone }}
+        <br>
+        <span class="mb-2">Address: </span>
+        {{ shipping_info.shipping_address }}
+        <br>
+        <span class="mb-2">State: </span>
+        {{ shipping_info.shipping_state }}
+        <br>
+    </div>
+</div> 
+<form action="{% url 'process_order' %}" method="post">
+    <div class="card mb-5 mx-auto" style="width: 48%;">
+        <div class="card-body">
+            <p class="fs-4 fw-bold mb-3">Card Info</p>
+        
+            {% csrf_token %}
+            {{ billing_form.as_p }}
+        </div>
+    </div>
+
+    <div class="card mb-5 mx-auto" style="border: none">
+        <button type="submit" class="btn btn-outline-primary mx-auto rounded-pill" style="width: 48%">Pay now</button>
+    </div>
+</form>
+
+{% endblock %}
