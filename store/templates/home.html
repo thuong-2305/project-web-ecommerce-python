@@ -10,27 +10,30 @@
                 <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
             </div>
         </div> -->
-        <div class="banner">
+        <div class="discount">
             {% if discounted_categories %}
-                <div class="discount mt-4 p-3 bg-light text-dark rounded shadow w-100 text-center">
-                    <h3 class="discount-title text-danger">Special Discounts</h3>
+                <div class="mt-3 p-3 text-center">
+                    <h3 class="alert-heading font-weight-bold text-white">Special Discounts</h3>
                     <div class="row justify-content-center">
                         {% for category in discounted_categories %}
-                            <div class="col-md-4 mb-3">
-                                <div class="discount-category bg-danger text-white p-3 rounded">
-                                    <h5 class="category-name">{{ category.name }}</h5>
-                                    <p class="small-text">Shop now and save big on {{ category.name }} items!</p>
-                                    <a href="{% url 'category_products' category.id %}" class="btn btn-light">View
-                                        Deals</a>
+                            <div class="col-md-4 col-sm-6 mb-4">
+                                <div class="discount-category bg-dark text-white p-4 rounded shadow-lg hover-shadow-lg">
+                                    <h5 class="category-name mb-3">
+                                        <div class="font-weight-bold">
+                                            {{ category.name|capfirst }}
+                                        </div>
+                                    </h5>
+                                    <p class="small-text mb-3">Shop now and save big on {{ category.name }} items!</p>
+                                    <a href="{% url 'category' category.name %}"
+                                       class="btn btn-light btn-sm font-weight-bold">Shop Now</a>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
-            {% else %}
-                <p>No special discounts available at the moment.</p>
             {% endif %}
         </div>
+
 
 
         <div class="container d-flex justify-content-center align-items-center">

@@ -57,7 +57,12 @@ def product(request, pk):
 
 def home(request):
     products = Product.objects.all()
-    return render(request, 'home.html', {'products':products})
+    discounted_categories = show_discount()
+    context = {
+        'products': products,
+        'discounted_categories': discounted_categories
+    }
+    return render(request, 'home.html', context)
 
 def about(request):
     return render(request, 'about.html', {})
@@ -105,23 +110,11 @@ def register_user(request):
 
 
 
-def show_discount(request):
-    # Lấy các sự kiện giảm giá còn hiệu lực
+def show_discount():
     active_sales = SaleEvent.objects.filter(
         start_date__lte=datetime.now(),
         end_date__gte=datetime.now()
     )
 
-    # In ra thông tin active_sales để kiểm tra
-    print("Active Sales:", active_sales)
-
-    # Lấy danh sách các category được giảm giá
     discounted_categories = [sale.category for sale in active_sales]
-
-    # In ra danh sách các category giảm giá
-    print("Discounted Categories:", discounted_categories)
-
-    context = {
-        'discounted_categories': discounted_categories,
-    }
-    return render(request, 'home.html', context)
+    return discounted_categories
