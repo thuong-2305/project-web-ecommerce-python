@@ -114,3 +114,16 @@ def update_product_prices(sender, instance, **kwargs):
     products = Product.objects.filter(category=instance.category)
     for product in products:
         product.get_discounted_price() 
+
+
+# --------------------------------- Review ---------------------------------------
+class Review(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField()  
+    comment = models.TextField(blank=True, null=True)
+    review_date = models.DateTimeField(default=datetime.now)
+
+    def __str__(self):
+        return f'Review by {self.user.username} for {self.product.name}'
+

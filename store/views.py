@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -7,13 +8,65 @@ from django.db.models import Q
 from cart.cart import Cart
 
 from payment.forms import ShippingForm
-from payment.models import ShippingAddress
+from payment.models import Order, OrderItem, ShippingAddress
 
-from .models import Product, Category, Profile, SaleEvent
-from .forms import SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
-from datetime import datetime
+from .models import Product, Category, Profile, Review, SaleEvent
+from .forms import ReviewForm, SignUpForm, UpdateUserForm, ChangePasswordForm, UserInfoForm
+from datetime import datetime, timedelta
 import json
 
+def review(request, pk):
+    product = get_object_or_404(Product, id=pk)
+    user_current = request.user
+    form = ReviewForm()
+    orders = Order.objects.filter(user=user_current, shipped=True)
+    
+    # Check if user has a recent order with the product
+    has_recent_purchase = False
+    orders = Order.objects.filter(user=user_current, shipped=True)
+    # Lấy phần ngày, tháng, năm của ngày giao hàng và ngày hiện tại
+    today = datetime.now().date()
+    thirty_days_ago = today - timedelta(days=30)
+    for order in orders:
+        # Check if product exists in order items
+        order_items = OrderItem.objects.filter(order=order, product=product)
+        if order_items:  
+            # Check if order is shipped within the last 30 days
+            order_date = order.date_shipped.date()
+            
+            if order.date_shipped and order_date >= thirty_days_ago:
+                has_recent_purchase = True
+                break  # No need to check further orders
+
+    if not has_recent_purchase: 
+        messages.success(request, "Please buy product")
+        return redirect('home')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.product = product
+            review.save()
+            messages.success(request, "Đánh giá của bạn đã được gửi!")
+            return redirect('home')
+        else:
+            messages.success(request, "Đánh giá thất bại")
+            return redirect('home')
+    else:
+        return render(request, "review_product.html", {'form':form, 'product':product, 'pk':pk})
+
+
+# def validate_review_allowed(user, product):
+#     # Lấy danh sách các đơn hàng đã giao của user
+    
+#     for order in orders:
+#         order_items = OrderItem.objects.filter(order=order, product=product)
+#         if order.date_shipped and order.date_shipped >= datetime.now() - timedelta(days=30):
+#             return True  # Có thể đánh giá
+#     raise ValidationError("Bạn chỉ có thể đánh giá sản phẩm trong vòng 30 ngày kể từ khi giao hàng.")
+    
 
 def search(request):
     #Determine if they filled out the form
@@ -113,13 +166,16 @@ def product(request, pk):
         {parts[0]: [{kv.split(": ")[0]: kv.split(": ")[1]} for kv in parts[1:] if ": " in kv]}
         for con in config if con
         for parts in [con.split(" + ")]]
-                    
+    
+    reviews = Review.objects.filter(product=product)  
+
     return render(request, 'product.html', 
         {'product':product, 
          'description':description, 
          'price':price, 
          'sale_price':sale_price,
-         'config':processed_config}
+         'config':processed_config,
+         'reviews' : reviews}
     )
 
 def home(request):

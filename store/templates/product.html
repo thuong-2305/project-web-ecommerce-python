@@ -285,35 +285,40 @@
                             aria-selected="true" style="font-weight: 500; font-size: 1.2rem; padding: 0; color: black">
                             ĐÁNH GIÁ SẢN PHẨM
                         </a>
+                        {% if reviews %}
+                        {% for review in reviews %}
                         <ul class="comment-list">
                             <li class="mb-4 row">
-                                <!--                                Khách hàng-->
+                                <!-- Khách hàng-->
                                 <div class="comment-header col-2">
-                                    <div class="comment-name" style="font-weight: bold">Như</div>
-                                    <div class="comment-date">09/09/2024</div>
+                                    <div class="comment-name" style="font-weight: bold">{{ review.user.username }}</div>
+                                    <div class="comment-date">{{ review.review_date|date:"d/m/Y" }}</div>
                                 </div>
-                                <!--                                rating-->
+                                <!-- rating-->
                                 <div class="comment-content col-10">
                                     <div class="rating-box mt-2">
                                         <div class="text-warning mb-1 me-2">
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
-                                            <i class="fa fa-star"></i>
+                                            {% for i in "12345"|make_list %}
+                                                {% if review.rating|stringformat:"s" >= i %}
+                                                    <i class="fa fa-star"></i>
+                                                {% else %}
+                                                    <i class="fa-regular fa-star"></i>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
                                     </div>
-                                    <!--                                    Đánh giá-->
+                                    <!-- Đánh giá-->
                                     <div class="mt-2">
-                                        Cảm ơn vì đã nhiệt tình hỗ trợ. Đập hộp cái MacBook thứ nhất bị vấn đề và được
-                                        đập hộp cái thứ 2 ngay và luôn. Các bạn nhân viên vẫn
-                                        rất có tâm, nhiệt tình và vui vẻ mặc dù cận giờ đóng cửa. Trước đó bạn nhân viên
-                                        online cũng cố gắng hỗ trợ mấy lượt để giữ hàng cho mình tại shop. Mình đánh giá
-                                        5 sao cộng và chúc các bạn được nhiều sức khoẻ và được nhiều khách hàng yêu quý.
+                                        {{ review.comment }}
                                     </div>
                                 </div>
                             </li>
                         </ul>
+                        {% endfor %}
+                        {% else %}
+                        <p>Chứa có đánh giá sản phẩm</p>
+                        {% endif %}
+                        <a href="{% url 'review' product.id %}">Đánh giá</a>
                     </div>
                 </div>
             </div>

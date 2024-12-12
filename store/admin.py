@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Customer, Product, Order, Profile, SaleEvent
+from .models import Category, Customer, Product, Order, Profile, Review, SaleEvent
 from django.contrib.auth.models import User
 
 admin.site.register(Category)
@@ -8,6 +8,7 @@ admin.site.register(Product)
 admin.site.register(Order)
 admin.site.register(SaleEvent)
 admin.site.register(Profile)
+admin.site.register(Review)
 
 # Mix profile info and user info
 class ProfileInline(admin.StackedInline):
@@ -24,3 +25,7 @@ admin.site.unregister(User)
 
 # Re-register the new way
 admin.site.register(User, UserAdmin)
+
+class ReviewAdmin(admin.ModelAdmin):
+    model = Review
+    fields = ['product', 'user', 'rating', 'comment', 'review_date']
