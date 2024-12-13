@@ -41,7 +41,7 @@ def review(request, pk):
     if not has_recent_purchase: 
         messages.success(request, "Please buy product")
         return redirect('home')
-
+    
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():

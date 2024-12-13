@@ -5,6 +5,32 @@ from cart.cart import Cart
 from payment.forms import PaymentForm, ShippingForm
 from payment.models import Order, ShippingAddress, OrderItem
 
+def orders(request, pk):
+    if request.user.is_authenticated:
+        order = Order.objects.get(id=pk)
+        items = OrderItem.objects.filter(order=pk)
+        return render(request, 'payment/orders.html', {'order':order, 'items':items})
+    else:
+        messages.success(request, "Access Dinied")
+        return redirect('home')
+
+def not_shipped_dash(request):
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(shipped=False, user=request.user)
+
+        return render(request, 'payment/not_shipped_dash.html', {'orders':orders})
+    else:
+        messages.success(request, "Access Dinied")
+        return redirect('home')
+
+def shipped_dash(request):
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(shipped=True, user=request.user)
+        return render(request, 'payment/shipped_dash.html', {'orders': orders})
+    else:
+        messages.success(request, "Access Dinied")
+        return redirect('home')
+
 def payment_success(request):
     return render(request, 'payment/payment_success.html', {})
 

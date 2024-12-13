@@ -45,6 +45,15 @@
                     <div class="dropdown-content" id="dropdown">
                         <a href="{% url 'update_user' %}">Profile</a>
                         <a href="#">Settings</a>
+                        <li class="nav-item dropdown w-100">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                              Orders
+                            </a>
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" href="{% url 'shipped_dash' %}">Shipped orders</a>
+                                <a class="dropdown-item" href="{% url 'not_shipped_dash' %}">Unshipped orders</a>
+                            </ul>
+                        </li>
                         <a href="{% url 'logout' %}">Logout</a>
                     </div>
                 </div>
