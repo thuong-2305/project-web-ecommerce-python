@@ -2,95 +2,106 @@
 {% load humanize %}
 
 {% block content %}
-<!-- Header-->
-<header class="bg-dark py-5">
-    <div class="banner">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="../../static/js/discount.js"></script>
+    <link rel="stylesheet" href="../../static/css/homediscount.css">
+
+    <!-- Discount banner -->
+    <div class="discount-banner">
         {% if discounted_categories %}
-            <div class="discount mt-4 p-3 bg-light text-dark rounded shadow w-100 text-center">
-                <h3 class="discount-title text-danger">Special Discounts</h3>
-                <div class="row justify-content-center">
-                    {% for category in discounted_categories %}
-                        <div class="col-md-4 mb-3">
-                            <div class="discount-category bg-danger text-white p-3 rounded">
-                                <h5 class="category-name">{{ category.name }}</h5>
-                                <p class="small-text">Shop now and save big on {{ category.name }} items!</p>
-                                <a href="{% url 'category' category %}" class="btn btn-light">View
-                                    Deals</a>
+            <div class="discount-slider mt-0 mb-0 p-3 rounded shadow w-100">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        {% for category in discounted_categories %}
+                            <div class="swiper-slide discount-category">
+                                <h5 class="category-name">{{ category.name | upper }}</h5>
+                                <p class="small-text text-dark">Shop now and save big on {{ category.name }} items!</p>
+                                <a href="{% url 'category' category %}" class="btn btn-light">View Deals</a>
                             </div>
-                        </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
                 </div>
             </div>
-        {% else %}
-            <p>No special discounts available at the moment.</p>
         {% endif %}
     </div>
-    <div class="container d-flex justify-content-center align-items-center">
-        <div class="banner-content">
-            <h1 class="banner-title text-white">New Tech Gift</h1>
-            <p class="banner-description  text-white">Discover the latest gadgets and tech gifts for
-                everyone!</p>
-            <a href="#" class="btn btn-outline-primary">Shop Now</a>
-            <p class="small-text text-white mt-4">Limited time offer!</p>
-        </div>
-        <div class="image-container ms-3">
-            <img src="../../static/assets/Banner-Slider.png" alt="Tech Gift" style="width:300px; height: 300px">
-        </div>
-    </div>
-    </div>
-</header>
-<!-- Section-->
-<section class="py-5">
-    <div class="container px-4 px-lg-5 mt-5">
-        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            {% for product in products %}
-            {% if product.is_sale %}
-            <div class="col mb-5">
-                <div class="card h-70">
-                    <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale
-                    </div>
-                    <!-- Product image-->
-                    <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
-                    <!-- Product details-->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Product name-->
-                            <h5 class="fw-semibold text-secondary">{{ product.name }}</h5>
-                            <!-- Product price-->
-                            <strike class="">{{ product.price|floatformat:0|intcomma }} đ</strike> <br>
-                            <!-- <span class="text-primary fw-bold fs-5">{{ product.sale_price|floatformat:0|intcomma }} đ</span> -->
-                            <span class="text-primary fw-bold fs-5">{{ product.get_discounted_price|floatformat:0|intcomma }} đ</span>
-                        </div>
-                    </div>
-                    <!-- Product actions-->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">View product</a></div>
-                    </div>
-                </div>
+
+    <!-- Header-->
+
+    <header class="bg-dark py-5">
+        <div class="container d-flex justify-content-center align-items-center">
+            <div class="banner-content">
+                <h1 class="banner-title text-white">New Tech Gift</h1>
+                <p class="banner-description  text-white">Discover the latest gadgets and tech gifts for
+                    everyone!</p>
+                <a href="#" class="btn btn-outline-primary">Shop Now</a>
+                <p class="small-text text-white mt-4">Limited time offer!</p>
             </div>
-            {% else %}
-            <div class="col mb-5">
-                <div class="card h-70">
-                    <!-- Product image-->
-                    <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
-                    <!-- Product details-->
-                    <div class="card-body p-4">
-                        <div class="text-center">
-                            <!-- Product name-->
-                            <h5 class="fw-semibold text-secondary">{{ product.name }}</h5>
-                            <!-- Product price-->
-                            <span class="text-primary fw-bold fs-5">{{ product.price|floatformat:0|intcomma }} đ</span>
-                        </div>
-                    </div>
-                    <!-- Product actions-->
-                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center"><a class="btn btn-outline-dark mt-auto" href="{% url 'product' product.id %}">View product</a></div>
-                    </div>
-                </div>
+            <div class="image-container ms-3">
+                <img src="../../static/assets/Banner-Slider.png" alt="Tech Gift" style="width:300px; height: 300px">
             </div>
-            {% endif %}
-            {% endfor %}
         </div>
-    </div>
-</section>
+    </header>
+    <!-- Section-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                {% for product in products %}
+                    {% if product.is_sale %}
+                        <div class="col mb-5">
+                            <div class="card h-70">
+                                <div class="badge bg-danger text-white position-absolute"
+                                     style="top: 0.5rem; right: 0.5rem">Sale
+                                </div>
+                                <!-- Product image-->
+                                <img class="card-img-top" src="{{ product.image.url }}" alt="..."/>
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-semibold text-secondary">{{ product.name }}</h5>
+                                        <!-- Product price-->
+                                        <strike class="">{{ product.price|floatformat:0|intcomma }} đ</strike> <br>
+                                        <!-- <span class="text-primary fw-bold fs-5">{{ product.sale_price|floatformat:0|intcomma }} đ</span> -->
+                                        <span class="text-primary fw-bold fs-5">{{ product.get_discounted_price|floatformat:0|intcomma }} đ</span>
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                                                href="{% url 'product' product.id %}">View product</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col mb-5">
+                            <div class="card h-70">
+                                <!-- Product image-->
+                                <img class="card-img-top" src="{{ product.image.url }}" alt="..."/>
+                                <!-- Product details-->
+                                <div class="card-body p-4">
+                                    <div class="text-center">
+                                        <!-- Product name-->
+                                        <h5 class="fw-semibold text-secondary">{{ product.name }}</h5>
+                                        <!-- Product price-->
+                                        <span class="text-primary fw-bold fs-5">{{ product.price|floatformat:0|intcomma }} đ</span>
+                                    </div>
+                                </div>
+                                <!-- Product actions-->
+                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                    <div class="text-center"><a class="btn btn-outline-dark mt-auto"
+                                                                href="{% url 'product' product.id %}">View product</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
 {% endblock %}
