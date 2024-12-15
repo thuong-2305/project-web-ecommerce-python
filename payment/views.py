@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from cart.cart import Cart
 from payment.forms import PaymentForm, ShippingForm
 from payment.models import Order, ShippingAddress, OrderItem
+from store.models import Profile
 
 def orders(request, pk):
     if request.user.is_authenticated:
@@ -121,6 +122,10 @@ def process_order(request):
                 if key == 'session_key':
                     del request.session[key]
 
+            # Delete our cart from db when buyed success
+            current_user = Profile.objects.filter(user__id=request.user.id)
+            current_user.update(old_cart='')
+
             messages.success(request, "Payment successful!")
             return redirect('home')
         else:
@@ -129,3 +134,42 @@ def process_order(request):
     else:
         messages.success(request, "Access Cancled")
         return redirect('home')
+    
+
+def process_order_paypal(request):
+    if request.POST:
+        if request.user.is_authenticated:
+            # Delete out of products cart when buyed
+            for key in list(request.session.keys()):
+                if key == 'session_key':
+                    del request.session[key]
+
+            # Delete our cart from db when buyed success
+            current_user = Profile.objects.filter(user__id=request.user.id)
+            current_user.update(old_cart='')
+
+            messages.success(request, "Payment successful!")
+            return redirect('home')
+        else:
+            messages.success(request, "Please login or register to buy products...")
+            return redirect('home')
+    
+
+    
+def process_order_upon(request):
+    if request.POST:
+        if request.user.is_authenticated:
+            # Delete out of products cart when buyed
+            for key in list(request.session.keys()):
+                if key == 'session_key':
+                    del request.session[key]
+
+            # Delete our cart from db when buyed success
+            current_user = Profile.objects.filter(user__id=request.user.id)
+            current_user.update(old_cart='')
+
+            messages.success(request, "Payment successful!")
+            return redirect('home')
+        else:
+            messages.success(request, "Please login or register to buy products...")
+            return redirect('home')
