@@ -23,15 +23,15 @@
     </div>
 </section> -->
 
-<section class="py-5">
+<section class="pb-5">
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <form method="post" action="{% url 'register' %}">
+                        <form method="post" action="{% url 'update_user' %}">
                             {% csrf_token %}
-
+                            
                             <!-- Username Field -->
                             <div class="mb-3 d-flex flex-column">
                                 <label for="id_username" class="form-label fw-semibold">Username</label>
@@ -61,6 +61,19 @@
                                 <button type="submit" class="btn btn-primary">Update Profile</button>
                             </div>
                         </form>
+                        <hr><br>
+                        <a 
+                            href="{% url 'update_password' %}" 
+                            class="btn btn-success w-100" 
+                            style="background-color: limegreen !important;">
+                            Update Password
+                        </a>
+                        <a 
+                            href="{% url 'update_info' %}" 
+                            class="btn btn-success w-100 mt-3" 
+                            style="background-color:lightblue !important;">
+                            Add information
+                        </a>
                     </div>
                 </div>
             </div>
