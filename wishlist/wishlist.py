@@ -4,11 +4,10 @@ from store.models import Product
 class Wishlist():
     def __init__(self, request):
         self.session = request.session
+        wishlist = self.session.get('wishlist_session')
 
-        wishlist = self.session.get('session_key')
-
-        if 'session_key' not in request.session:
-            wishlist = self.session['session_key'] = {}
+        if 'wishlist_session' not in request.session:
+            wishlist = self.session['wishlist_session'] = {}
 
         self.wishlist = wishlist
 
@@ -17,10 +16,10 @@ class Wishlist():
         product_price = str(price)
         msg = ""
         if product_id in self.wishlist:
-            msg = "Sản phẩm đã có trong giả hàng"
+            msg = "Sản phẩm đã có trong wishlist"
         else:
             self.wishlist[product_id] = str(product_price)
-            msg = "Thêm vào giỏ hàng thành công"
+            msg = "Thêm vào wishlist thành công"
 
         self.session.modified = True
         return msg
