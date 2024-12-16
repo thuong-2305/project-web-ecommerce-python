@@ -37,9 +37,11 @@
                             <p class="card-text"><span><strong>Price:</strong> </span>{{ item.product.price|floatformat:0|intcomma }} đồng</p>
                             {% endif %}
                         </div>
+                        {% if order.shipped %}
                         <a href="{% url 'review' item.product.id %}" 
                             class="btn btn-primary mt-3 border-0 w-50" 
                             style="background-color: transparent; color: black; border: 1px solid black !important;">Đánh giá</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

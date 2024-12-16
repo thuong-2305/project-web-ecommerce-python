@@ -18,7 +18,6 @@ def orders(request, pk):
 def not_shipped_dash(request):
     if request.user.is_authenticated:
         orders = Order.objects.filter(shipped=False, user=request.user)
-
         return render(request, 'payment/not_shipped_dash.html', {'orders':orders})
     else:
         messages.success(request, "Access Dinied")
@@ -142,7 +141,47 @@ def process_order(request):
 
 def process_order_paypal(request):
     if request.POST:
+        cart = Cart(request)
+        cart_products = cart.get_prods 
+        quantities = cart.get_quants
+        totals = cart.total_final()
+
+        # Get billing info from card 
+        payment_form = PaymentForm(request.POST or None)
+
+        # Get shipping Session data
+        my_shipping = request.session.get('my_shipping')
+
+        # Create Shipping info from session info
+        full_name = my_shipping['shipping_full_name']
+        phone = my_shipping['shipping_phone']
+        shipping_address = f"{my_shipping['shipping_address']}\n{my_shipping['shipping_state']}"
+        amount_paid = totals
+
         if request.user.is_authenticated:
+            #logged in
+            user = request.user
+            # create Order 
+            create_order = Order(user=user, full_name=full_name, phone=phone, shipping_address=shipping_address, amount_paid=amount_paid)
+            create_order.save()
+
+            # Add order item
+            # Get order id
+            order_id = create_order.pk
+            # Get product id
+            for product in cart_products():
+                product_id = product.id
+                
+                if product.is_sale:
+                    price = product.sale_price
+                else:
+                    price = product.price
+
+                for key, value in quantities().items():
+                    if int(key) == product.id:
+                        create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
+                        create_order_item.save()
+
             # Delete out of products cart when buyed
             for key in list(request.session.keys()):
                 if key == 'session_key':
@@ -162,7 +201,47 @@ def process_order_paypal(request):
     
 def process_order_upon(request):
     if request.POST:
+        cart = Cart(request)
+        cart_products = cart.get_prods 
+        quantities = cart.get_quants
+        totals = cart.total_final()
+
+        # Get billing info from card 
+        payment_form = PaymentForm(request.POST or None)
+
+        # Get shipping Session data
+        my_shipping = request.session.get('my_shipping')
+
+        # Create Shipping info from session info
+        full_name = my_shipping['shipping_full_name']
+        phone = my_shipping['shipping_phone']
+        shipping_address = f"{my_shipping['shipping_address']}\n{my_shipping['shipping_state']}"
+        amount_paid = totals
+
         if request.user.is_authenticated:
+            #logged in
+            user = request.user
+            # create Order 
+            create_order = Order(user=user, full_name=full_name, phone=phone, shipping_address=shipping_address, amount_paid=amount_paid)
+            create_order.save()
+
+            # Add order item
+            # Get order id
+            order_id = create_order.pk
+            # Get product id
+            for product in cart_products():
+                product_id = product.id
+                
+                if product.is_sale:
+                    price = product.sale_price
+                else:
+                    price = product.price
+
+                for key, value in quantities().items():
+                    if int(key) == product.id:
+                        create_order_item = OrderItem(order_id=order_id, product_id=product_id, user=user, quantity=value, price=price)
+                        create_order_item.save()
+
             # Delete out of products cart when buyed
             for key in list(request.session.keys()):
                 if key == 'session_key':

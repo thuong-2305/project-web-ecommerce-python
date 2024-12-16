@@ -38,6 +38,11 @@ def review(request, pk):
                 has_recent_purchase = True
                 break  # No need to check further orders
 
+    # Kiểm tra xem người đó đã đánh giá sản phầm hay chưa
+    if Review.objects.filter(user=user_current, product=product).exists():
+        messages.success(request, "Product your reviewed...")
+        return redirect('home')
+
     if not has_recent_purchase: 
         messages.success(request, "Please buy product")
         return redirect('home')

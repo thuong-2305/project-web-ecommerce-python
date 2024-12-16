@@ -326,6 +326,17 @@
     </div>
 </section>
 
+<!-- Modal -->
+<div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-body bg-success text-white fw-semibold" id="notificationModalBody">
+          <!-- Nội dung thông báo sẽ được thêm vào đây -->
+        </div>
+      </div>
+    </div>
+</div>
+
 <script>
     function showNotification(message, duration = 3000) {
         const notification = document.getElementById('notification');
@@ -369,8 +380,18 @@
                 action: 'post'
             },
             success: function (json) {
-                location.reload()
-                showNotification(json.msg);
+                // location.reload()
+                // showNotification(json.msg);
+                $('#notificationModalBody').html(`<p class="mb-0">${json.msg}</p>`);
+
+                // Hiển thị modal
+                const modal = new bootstrap.Modal(document.getElementById('notificationModal'));
+                modal.show();
+                
+                // Reload lại trang nếu cần sau vài giây
+                setTimeout(function () {
+                    location.reload();
+                }, 1000); // 3 giây trước khi reload
             },
         })
     })

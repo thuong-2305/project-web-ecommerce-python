@@ -124,6 +124,9 @@ class Review(models.Model):
     comment = models.TextField(blank=True, null=True)
     review_date = models.DateTimeField(default=datetime.now)
 
+    class Meta:
+        unique_together = ('user', 'product')  # Đảm bảo một người chỉ đánh giá một sản phẩm một lần
+
     def __str__(self):
         return f'Review by {self.user.username} for {self.product.name}'
 
