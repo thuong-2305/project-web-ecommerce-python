@@ -17,6 +17,8 @@ class Cart():
         # Make sure cart is available on all pages of site
         self.cart = cart
 
+        self.shipping_method = self.session.get('shipping_method', 'normal')
+
     def add(self, product, quantity):
         product_id = str(product.id)
         product_qty = str(quantity)
@@ -81,7 +83,15 @@ class Cart():
                         total += product.price*val
 
         return total
-
+    
+    def get_shipping_cost(self, shipping_method):
+        if shipping_method == 'normal':
+            return 20000
+        return 100000
+    
+    def total_final(self):
+        shipping_cost = self.get_shipping_cost(self.shipping_method)
+        return self.total() + shipping_cost
     
     def get_prods(self):
         #get ids from cart
@@ -134,3 +144,10 @@ class Cart():
             carty = carty.replace("\'", "\"") 
             # Save carty to the Profile model
             current_user.update(old_cart=str(carty))
+
+
+    def update_shipping(self, shipping_method):
+        self.session['shipping_method'] = shipping_method
+        self.shipping_method = shipping_method
+
+        self.session.modified = True

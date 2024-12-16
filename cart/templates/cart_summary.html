@@ -185,21 +185,21 @@
                                     <td data-title="Shipping" class="w-100 dp-tbrow txt-align-left">
                                         <ul class="ul-none ps-0" id="shipping-method">
                                             <li>
-                                                <input type="radio" name="shipping_method[0]" data-index="0"
-                                                    id="shipping_method_0_flat_rate1" value="flat_rate:1"
+                                                <input type="radio" name="shipping_method" data-index="0"
+                                                    id="shipping_method_0_flat_rate1" value="normal"
                                                     class="shipping_method" checked="checked">
                                                 <label for="shipping_method_0_flat_rate1">Normal: <span
                                                         class="woocommerce-Price-amount amount"><bdi><span
-                                                                class="woocommerce-Price-currencySymbol"></span>0
+                                                                class="woocommerce-Price-currencySymbol"></span>20,000
                                                             đồng</bdi></span></label>
                                             </li>
                                             <li>
-                                                <input type="radio" name="shipping_method[0]" data-index="0"
-                                                    id="shipping_method_0_flat_rate2" value="flat_rate:2"
+                                                <input type="radio" name="shipping_method" data-index="0"
+                                                    id="shipping_method_0_flat_rate2" value="express"
                                                     class="shipping_method">
                                                 <label for="shipping_method_0_flat_rate2">Express: <span
                                                         class="woocommerce-Price-amount amount"><bdi><span
-                                                                class="woocommerce-Price-currencySymbol"></span>500.000
+                                                                class="woocommerce-Price-currencySymbol"></span>100,000
                                                             đồng</bdi></span></label>
                                             </li>
                                         </ul>
@@ -212,7 +212,7 @@
                                     <td data-title="Total" class="order-total-content">
                                         <strong>
                                             <span class="woocommerce-Price-amount amount">
-                                                <span class="currencySymbol"></span>{{ totals|floatformat:0|intcomma }}
+                                                <span class="currencySymbol"></span>{{ total_final|floatformat:0|intcomma }}
                                                 đồng
                                             </span>
                                         </strong>
@@ -285,9 +285,32 @@
             },
 
             error: function (xhr, errmsg, err) {
-
+                alert("Error occurred: " + errmsg);
             }
         })
     })
+    // Delivery
+    $(document).on('change', "input[name='shipping_method']", function (e) {
+        e.preventDefault();
+        let selectedShipping = $("input[name='shipping_method']:checked").val();
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "cart_update_shipping" %}',
+            data: {
+                shipping_method: selectedShipping,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'update_shipping'
+            },
+            success: function (json) {
+                $(".order-total-content strong .woocommerce-Price-amount.amount").html(
+                    `<span class="currencySymbol"></span>${json.total_final.toLocaleString()} đồng`
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                alert("Error occurred: " + errmsg);
+            }
+    });
+});
 </script>
 {% endblock %}

@@ -9,7 +9,8 @@ def cart_summary(request):
     cart_products = cart.get_prods 
     quantities = cart.get_quants
     totals = cart.total()
-    return render(request, 'cart_summary.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals})
+    total_final = cart.total_final()
+    return render(request, 'cart_summary.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'total_final':total_final})
 
 def cart_add(request):   
     cart = Cart(request)  
@@ -57,5 +58,17 @@ def cart_update(request):
         messages.success(request, ("Đã update số lượng thành công..."))
         return response
         # return redirect('cart_summary')
+
+def cart_update_shipping(request):
+    cart = Cart(request)
+    if request.POST.get('action') == 'update_shipping':
+        shipping_method = request.POST.get('shipping_method')
+        # Lưu giá trị shipping_method vào session
+        cart.update_shipping(shipping_method=shipping_method)
+        total_final = cart.total_final()
+        total_final = "{:,.0f}".format(total_final)
+
+        return JsonResponse({'total_final': total_final, 'shipping_method': shipping_method})
+    return JsonResponse({'status': 'error'}, status=400)
 
 
