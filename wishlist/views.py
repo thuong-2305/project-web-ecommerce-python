@@ -21,3 +21,4 @@ def wishlist_add(request):
         
         response = JsonResponse({'msg': msg})
         return response
+    
