@@ -18,8 +18,7 @@
     </div>
 </header>
 
-<!-- discount -->
-<section class="banner">
+<!-- <section class="banner">
     {% if discounted_categories %}
         <div class="discount p-3 bg-light text-dark rounded shadow w-100 text-center">
             <h3 class="discount-title text-danger text-uppercase fw-bold mb-4">🔥 Special Discounts 🔥</h3>
@@ -30,7 +29,6 @@
                             <h5 class="category-name text-uppercase fw-bold">{{ category.name }}</h5>
                             <p class="small-text fst-italic">Shop now and save big on {{ category.name }} items!</p>
                             <a href="{% url 'category' category %}" class="btn btn-light fw-bold mt-3">View Deals</a>
-                            <!-- Decorative overlay -->
                             <div class="overlay position-absolute top-0 start-0 w-100 h-100 bg-white opacity-25 rounded" style="z-index: -1;"></div>
                         </div>
                     </div>
@@ -40,7 +38,28 @@
     {% else %}
         <p class="text-muted fst-italic">No special discounts available at the moment.</p>
     {% endif %}
-</section>
+</section> -->
+<!-- Discount banner -->
+<div class="discount-banner mt-2">
+    {% if active_sale %}
+    <div class="discount-slider mt-0 mb-0 p-3 rounded shadow w-100">
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                {% for sale in active_sale %}
+                <div class="swiper-slide discount-category py-2">
+                    <h5 class="category-name text-danger">🔥 {{ sale.category.name | upper }} <span class="fw-bold">Sale up to {{ sale.discount_percentage|floatformat:0|intcomma }}%</span> 🔥</h5>
+                    <p class="small-text text-dark">Shop now and save big on {{ sale.category.name }} items!</p>
+                    <a href="{% url 'category' sale.category %}" class="btn btn-light">View Deals</a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 
 <!-- Section show product-->
 <section class="py-5">
