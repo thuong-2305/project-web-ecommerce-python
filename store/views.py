@@ -191,6 +191,7 @@ def home(request):
     context = {
         'products':products,
         'discounted_categories': discounted_categories,
+        'active_sale': active_sales
     }
 
     return render(request, 'home.html', context)
