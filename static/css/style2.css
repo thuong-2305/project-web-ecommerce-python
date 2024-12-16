@@ -81,4 +81,45 @@
   background-color: #cc0000;
 }
 
+.box-card {
+  transition: .3s linear;
+}
+
+
+.box-card:hover {
+  transform: translateY(-10px);
+}
+
+/* discount */
+.discount-title {
+  font-size: 2rem;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.discount-category {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.discount-category:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.discount-category .btn {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.discount-category .btn:hover {
+  background-color: #000;
+  color: #fff;
+}
+
+.overlay {
+  transition: opacity 0.3s ease;
+}
+
+.discount-category:hover .overlay {
+  opacity: 0.1;
+}
+
 

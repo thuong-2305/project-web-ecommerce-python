@@ -4,27 +4,6 @@
 {% block content %}
 <!-- Header-->
 <header class="bg-dark py-5">
-    <div class="banner">
-        {% if discounted_categories %}
-            <div class="discount mt-4 p-3 bg-light text-dark rounded shadow w-100 text-center">
-                <h3 class="discount-title text-danger">Special Discounts</h3>
-                <div class="row justify-content-center">
-                    {% for category in discounted_categories %}
-                        <div class="col-md-4 mb-3">
-                            <div class="discount-category bg-danger text-white p-3 rounded">
-                                <h5 class="category-name">{{ category.name }}</h5>
-                                <p class="small-text">Shop now and save big on {{ category.name }} items!</p>
-                                <a href="{% url 'category' category %}" class="btn btn-light">View
-                                    Deals</a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        {% else %}
-            <p>No special discounts available at the moment.</p>
-        {% endif %}
-    </div>
     <div class="container d-flex justify-content-center align-items-center">
         <div class="banner-content">
             <h1 class="banner-title text-white">New Tech Gift</h1>
@@ -37,15 +16,39 @@
             <img src="../../static/assets/Banner-Slider.png" alt="Tech Gift" style="width:300px; height: 300px">
         </div>
     </div>
-    </div>
 </header>
-<!-- Section-->
+
+<!-- discount -->
+<section class="banner">
+    {% if discounted_categories %}
+        <div class="discount p-3 bg-light text-dark rounded shadow w-100 text-center">
+            <h3 class="discount-title text-danger text-uppercase fw-bold mb-4">🔥 Special Discounts 🔥</h3>
+            <div class="row justify-content-center">
+                {% for category in discounted_categories %}
+                    <div class="col-md-4 mb-4">
+                        <div class="discount-category bg-danger text-white p-4 rounded position-relative overflow-hidden">
+                            <h5 class="category-name text-uppercase fw-bold">{{ category.name }}</h5>
+                            <p class="small-text fst-italic">Shop now and save big on {{ category.name }} items!</p>
+                            <a href="{% url 'category' category %}" class="btn btn-light fw-bold mt-3">View Deals</a>
+                            <!-- Decorative overlay -->
+                            <div class="overlay position-absolute top-0 start-0 w-100 h-100 bg-white opacity-25 rounded" style="z-index: -1;"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p class="text-muted fst-italic">No special discounts available at the moment.</p>
+    {% endif %}
+</section>
+
+<!-- Section show product-->
 <section class="py-5">
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             {% for product in products %}
             {% if product.is_sale %}
-            <div class="col mb-5">
+            <div class="col mb-5 box-card">
                 <div class="card h-70">
                     <div class="badge bg-danger text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale
                     </div>
@@ -69,7 +72,7 @@
                 </div>
             </div>
             {% else %}
-            <div class="col mb-5">
+            <div class="col mb-5 box-card">
                 <div class="card h-70">
                     <!-- Product image-->
                     <img class="card-img-top" src="{{ product.image.url }}" alt="..." />
