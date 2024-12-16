@@ -40,14 +40,15 @@ def checkout(request):
     cart_products = cart.get_prods 
     quantities = cart.get_quants
     totals = cart.total()
+    total_final = cart.total_final()
 
     if request.user.is_authenticated:
         shipping_user = ShippingAddress.objects.get(user__id=request.user.id)
         shipping_form = ShippingForm(request.POST or None, instance=shipping_user)
-        return render(request, 'payment/checkout.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_form':shipping_form})
+        return render(request, 'payment/checkout.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_form':shipping_form, 'total_final':total_final})
     else:
         shipping_form = ShippingForm(request.POST or None)
-        return render(request, 'payment/checkout.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_form':shipping_form})
+        return render(request, 'payment/checkout.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_form':shipping_form, 'total_final':total_final})
 
 
 def billing_info(request):
@@ -56,6 +57,9 @@ def billing_info(request):
         cart_products = cart.get_prods 
         quantities = cart.get_quants
         totals = cart.total()
+        shipping_method = cart.shipping_method
+        price_ship = cart.get_shipping_cost(shipping_method)
+        total_final = cart.total_final()
 
         #  Create a session with Shipping info
         my_shipping = request.POST
@@ -65,11 +69,11 @@ def billing_info(request):
         if request.user.is_authenticated:
             # Get billing form 
             billing_form = PaymentForm()
-            return render(request, 'payment/billing_info.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_info':request.POST, 'billing_form':billing_form})
+            return render(request, 'payment/billing_info.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'total_final':total_final, 'shipping_method':shipping_method, 'price_ship':price_ship, 'shipping_info':request.POST, 'billing_form':billing_form})
         else:
             billing_form = PaymentForm()
             shipping_form = ShippingForm(request.POST or None)
-            return render(request, 'payment/billing_info.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'shipping_form':shipping_form, 'billing_form':billing_form})
+            return render(request, 'payment/billing_info.html', {'cart_products':cart_products, 'quantities': quantities, 'totals':totals, 'total_final':total_final, 'shipping_method':shipping_method, 'price_ship':price_ship, 'shipping_form':shipping_form, 'billing_form':billing_form})
     else:
         messages.success(request, "Access Cancled")
         return redirect('home')
@@ -79,7 +83,7 @@ def process_order(request):
         cart = Cart(request)
         cart_products = cart.get_prods 
         quantities = cart.get_quants
-        totals = cart.total()
+        totals = cart.total_final()
 
         # Get billing info from card 
         payment_form = PaymentForm(request.POST or None)

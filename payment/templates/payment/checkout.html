@@ -82,24 +82,24 @@
                 <ul class="ul-none ps-3" id="shipping-method">
                     <li class="d-flex justify-content-between">
                         <div class="left">
-                            <input type="radio" name="shipping_method[0]" data-index="0"
-                                id="shipping_method_0_flat_rate1" value="flat_rate:1"
+                            <input type="radio" name="shipping_method" data-index="0"
+                                id="shipping_method_0_flat_rate1" value="normal"
                                 class="shipping_method" checked="checked">
                             <label for="shipping_method_0_flat_rate1">Normal: </label>
                         </div>
                         <strong>
-                            <span class="woocommerce-Price-amount amount"><bdi>0đ</bdi></span>
+                            <span class="woocommerce-Price-amount amount"><bdi>20,000đ</bdi></span>
                         </strong>
                     </li>
                     <li class="d-flex justify-content-between">
                         <div class="left">
-                            <input type="radio" name="shipping_method[0]" data-index="0"
-                                id="shipping_method_0_flat_rate2" value="flat_rate:2"
+                            <input type="radio" name="shipping_method" data-index="0"
+                                id="shipping_method_0_flat_rate2" value="express"
                                 class="shipping_method">
                             <label for="shipping_method_0_flat_rate2">Express: </label>
                         </div>
                         <strong>
-                            <span class="woocommerce-Price-amount amount"><bdi>500,000đ</bdi></span>
+                            <span class="woocommerce-Price-amount amount"><bdi>100,000đ</bdi></span>
                         </strong>
                     </li>
                 </ul>
@@ -109,8 +109,8 @@
                 <p class="mb-0">Total</p>
                 <p data-title="Total" class="order-total-content mb-0">
                     <strong>
-                        <span class="woocommerce-Price-amount amount">
-                            <span class="currencySymbol"></span>{{ totals|floatformat:0|intcomma }}đ                           
+                        <span class="woocommerce-Price-amount amount final">
+                            <span class="currencySymbol"></span>{{ total_final|floatformat:0|intcomma }}đ                           
                         </span>
                     </strong>
                 </p>
@@ -121,4 +121,29 @@
     </div>
 </div>
 </form>
+
+<script>
+    $(document).on('change', "input[name='shipping_method']", function (e) {
+        e.preventDefault();
+        let selectedShipping = $("input[name='shipping_method']:checked").val();
+
+        $.ajax({
+            type: 'POST',
+            url: '{% url "cart_update_shipping" %}',
+            data: {
+                shipping_method: selectedShipping,
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                action: 'update_shipping'
+            },
+            success: function (json) {
+                $(".order-total-content strong .woocommerce-Price-amount.amount.final").html(
+                    `<span class="currencySymbol"></span>${json.total_final.toLocaleString()} đ`
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                alert("Error occurred: " + errmsg);
+            }
+        });
+    });
+</script>
 {% endblock %}

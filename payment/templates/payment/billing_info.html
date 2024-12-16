@@ -59,19 +59,8 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between">
-                <span><strong>Shipping: </strong><small>&#40;via Normal Delivery&#41;</small></span>
-                <span class="woocommerce-Price-amount amount"><bdi>0đ</bdi></span>
-            </div>
-            <hr>
-            <div class="d-flex justify-content-between">
-                <strong>
-                    <p class="mb-0">Payment method:</p>
-                </strong>
-                <p data-title="Total" class="order-total-content mb-0">
-                    <span class="woocommerce-Price-amount amount">
-                        <span class="currencySymbol"></span>visa
-                    </span>
-                </p>
+                <span><strong>Shipping: </strong><small>&#40;via {{ shipping_method }} Delivery&#41;</small></span>
+                <span class="woocommerce-Price-amount amount"><bdi>{{ price_ship|intcomma}}đ</bdi></span>
             </div>
             <hr>
             <div class="d-flex justify-content-between">
@@ -80,7 +69,7 @@
                 </strong>
                 <p data-title="Total" class="order-total-content mb-0">
                     <span class="woocommerce-Price-amount amount">
-                        <span class="currencySymbol"></span>{{ totals|floatformat:0|intcomma }}đ
+                        <span class="currencySymbol"></span>{{ total_final|floatformat:0|intcomma }}đ
                     </span>
                 </p>
             </div>
