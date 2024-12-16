@@ -20,6 +20,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -118,3 +119,24 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Weblaptop Admin",
+    "site_brand": "Weblaptop",
+    "show_ui_builder": True,
+
+    "icons": {
+        "auth.User": "fas fa-user",      
+        "auth.Group": "fas fa-users",
+        "payment.OrderItem": "fas fa-shopping-cart",  
+        "payment.Order": "fas fa-file-invoice",      
+        "payment.ShippingAddress": "fas fa-map-marker-alt",  
+        "store.Category": "fas fa-list",             
+        "store.Customer": "fas fa-user",             
+        "store.Order": "fas fa-box",                 
+        "store.Product": "fas fa-tag",              
+        "store.Profile": "fas fa-id-card",           
+        "store.Review": "fas fa-star",              
+        "store.SaleEvent": "fas fa-percentage",    
+    },
+}
