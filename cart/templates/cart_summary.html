@@ -132,13 +132,13 @@
                                 {% for key, value in quantities.items %}
                                 {% if key == product.id|slugify %}
                                 <td class="product-quantity align-middle">
-                                    <small class="text-body-secondary">
-                                        <input type="text" value="{{ value }}"
-                                            id="input{{ product.id }}" class="py-1 rouded-pill">
+                                    <small class="text-body-secondary d-flex align-items-center">
+                                        <button type="button" class="btn btn-sm decrease-qty"  style="border: 1px solid #212529; background-color: transparent; color: #212529"
+                                        data-index="{{ product.id }}"><i class="fa-solid fa-minus"></i></button>
+                                        <span id="qty{{ product.id }}" class="mx-2 fw-bold" style="font-size:19px">{{ value }}</span>
+                                        <button type="button" class="btn btn-sm increase-qty"  style="border: 1px solid #212529; background-color: transparent; color: #212529"
+                                            data-index="{{ product.id }}"><i class="fa-solid fa-plus"></i></button>
                                     </small>
-                                    <button type="button" data-index="{{ product.id }}"
-                                        class="btn btn-secondary update-cart" style="background-color: #212529">Cật nhật SL
-                                    </button>
                                 </td>
                                 {% endif %}
                                 {% endfor %}
@@ -150,16 +150,6 @@
                                 </td>
                             </tr>
                             {% endfor %}
-                            <!-- Coupon -->
-                            <!-- <tr>
-                                <div class="coupon">
-                                    <label for="coupon_code"></label>
-                                    <input class="p-12" type="text" name="coupon" id="coupon-code"
-                                        placeholder="Coupon code">
-                                    <button class="btn-apply-coupon btn btn-primary p-12 rounded" type="submit"
-                                        name="apply_coupon" value="Apply coupon">Apply coupon</button>
-                                </div>
-                            </tr> -->
                         </tbody>
                     </table>
                 </form>
@@ -246,28 +236,70 @@
 
 <script>
     //update
-    $(document).on('click', '.update-cart', function (e) {
-        e.preventDefault();
-        var productid = $(this).data('index')
-        $.ajax({
-            type: 'POST',
-            url: '{% url "cart_update" %}',
-            data: {
-                product_id: $(this).data('index'),
-                product_qty: $('#input' + productid).val(),
-                csrfmiddlewaretoken: '{{ csrf_token }}',
-                action: 'post'
-            },
+    // $(document).on('click', '.update-cart', function (e) {
+    //     e.preventDefault();
+    //     var productid = $(this).data('index')
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '{% url "cart_update" %}',
+    //         data: {
+    //             product_id: $(this).data('index'),
+    //             product_qty: $('#input' + productid).val(),
+    //             csrfmiddlewaretoken: '{{ csrf_token }}',
+    //             action: 'post'
+    //         },
 
-            success: function (json) {
-                location.reload()
-            },
+    //         success: function (json) {
+    //             location.reload()
+    //         },
 
-            error: function (xhr, errmsg, err) {
+    //         error: function (xhr, errmsg, err) {
 
+    //         }
+    //     })
+    // })
+    $(document).ready(function () {
+        function updateCart(productId, quantity) {
+            $.ajax({
+                type: 'POST',
+                url: '{% url "cart_update" %}', 
+                data: {
+                    product_id: productId,
+                    product_qty: quantity,
+                    csrfmiddlewaretoken: '{{ csrf_token }}', 
+                    action: 'post'
+                },
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (xhr, errmsg, err) { }
+            });
+        }
+
+        // Xử lý nút giảm số lượng
+        $('.decrease-qty').on('click', function () {
+            var productId = $(this).data('index');
+            var qtyElement = $('#qty' + productId);
+            var currentQty = parseInt(qtyElement.text()) || 1;
+
+            if (currentQty > 1) {
+                var newQty = currentQty - 1;
+                qtyElement.text(newQty);
+                updateCart(productId, newQty);
             }
-        })
-    })
+        });
+
+        // Xử lý nút tăng số lượng
+        $('.increase-qty').on('click', function () {
+            var productId = $(this).data('index');
+            var qtyElement = $('#qty' + productId);
+            var currentQty = parseInt(qtyElement.text()) || 1;
+
+            var newQty = currentQty + 1;
+            qtyElement.text(newQty);
+            updateCart(productId, newQty);
+        });
+    });
     //delete
     $(document).on('click', '.delete-product', function (e) {
         e.preventDefault();

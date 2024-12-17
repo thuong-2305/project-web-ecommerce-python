@@ -17,7 +17,7 @@ def orders(request, pk):
 
 def not_shipped_dash(request):
     if request.user.is_authenticated:
-        orders = Order.objects.filter(shipped=False, user=request.user)
+        orders = Order.objects.filter(shipped=False, user=request.user).order_by('-date_ordered', '-id')
         return render(request, 'payment/not_shipped_dash.html', {'orders':orders})
     else:
         messages.success(request, "Access Dinied")
@@ -25,7 +25,7 @@ def not_shipped_dash(request):
 
 def shipped_dash(request):
     if request.user.is_authenticated:
-        orders = Order.objects.filter(shipped=True, user=request.user)
+        orders = Order.objects.filter(shipped=True, user=request.user).order_by('-date_ordered', '-id')
         return render(request, 'payment/shipped_dash.html', {'orders': orders})
     else:
         messages.success(request, "Access Dinied")
