@@ -102,7 +102,7 @@
 
 .discount-category:hover {
   transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .discount-category .btn {
@@ -120,6 +120,45 @@
 
 .discount-category:hover .overlay {
   opacity: 0.1;
+}
+
+/* Them vui */
+.info-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.info-icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
+}
+
+.info-divider {
+  height: 40px;
+  width: 1px;
+  background-color: #ddd;
+}
+
+.info-item strong {
+  color: #000;
+  font-size: 16px;
+}
+
+.info-item span {
+  color: #555;
+  font-size: 15px;
 }
 
 

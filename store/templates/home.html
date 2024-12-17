@@ -6,7 +6,7 @@
 <header class="bg-dark py-5">
     <div class="container d-flex justify-content-center align-items-center">
         <div class="banner-content">
-            <h1 class="banner-title text-white">New Tech Gift</h1>
+            <h1 class="banner-title text-white fw-semibold">New Tech Gift</h1>
             <p class="banner-description  text-white">Discover the latest gadgets and tech gifts for
                 everyone!</p>
             <a href="#" class="btn btn-outline-primary">Shop Now</a>
@@ -17,29 +17,6 @@
         </div>
     </div>
 </header>
-
-<!-- <section class="banner">
-    {% if discounted_categories %}
-        <div class="discount p-3 bg-light text-dark rounded shadow w-100 text-center">
-            <h3 class="discount-title text-danger text-uppercase fw-bold mb-4">🔥 Special Discounts 🔥</h3>
-            <div class="row justify-content-center">
-                {% for category in discounted_categories %}
-                    <div class="col-md-4 mb-4">
-                        <div class="discount-category bg-danger text-white p-4 rounded position-relative overflow-hidden">
-                            <h5 class="category-name text-uppercase fw-bold">{{ category.name }}</h5>
-                            <p class="small-text fst-italic">Shop now and save big on {{ category.name }} items!</p>
-                            <a href="{% url 'category' category %}" class="btn btn-light fw-bold mt-3">View Deals</a>
-                            <div class="overlay position-absolute top-0 start-0 w-100 h-100 bg-white opacity-25 rounded" style="z-index: -1;"></div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% else %}
-        <p class="text-muted fst-italic">No special discounts available at the moment.</p>
-    {% endif %}
-</section> -->
-<!-- Discount banner -->
 <div class="discount-banner mt-2">
     {% if active_sale %}
     <div class="discount-slider mt-0 mb-0 p-3 rounded shadow w-100">
@@ -61,8 +38,52 @@
     {% endif %}
 </div>
 
+<!-- Them vui -->
+<div class="container info-bar mt-5">
+    <div class="info-item">
+        <img src="../../static/assets/delivery-icon.png" alt="Delivery Icon" class="info-icon">
+        <div>
+            <strong>Free Delivery</strong><br>
+            <span>from 20K</span>
+        </div>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-item">
+        <img src="../../static/assets/feedback-icon.png" alt="Feedback Icon" class="info-icon">
+        <div>
+            <strong>99% Customer</strong><br>
+            <span>Feedbacks</span>
+        </div>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-item">
+        <img src="../../static/assets/return-icon.png" alt="Return Icon" class="info-icon">
+        <div>
+            <strong>365 Days</strong><br>
+            <span>for free return</span>
+        </div>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-item">
+        <img src="../../static/assets/payment-icon.png" alt="Payment Icon" class="info-icon">
+        <div>
+            <strong>Payment</strong><br>
+            <span>Secure System</span>
+        </div>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-item">
+        <img src="../../static/assets/best-brands-icon.png" alt="Brands Icon" class="info-icon">
+        <div>
+            <strong>Only Best</strong><br>
+            <span>Brands</span>
+        </div>
+    </div>
+</div>
+
+
 <!-- Section show product-->
-<section class="py-5">
+<section class="pb-5 pt-3">
     <div class="container px-4 px-lg-5 mt-5">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             {% for product in products %}
