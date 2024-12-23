@@ -12,10 +12,10 @@ class Wishlist():
         product_price = str(price)
         msg = ""
         if product_id in self.wishlist:
-            msg = "Sản phẩm đã có trong giả hàng"
+            msg = "Sản phẩm đã có trong wishlist"
         else:
             self.wishlist[product_id] = str(product_price)
-            msg = "Thêm vào giỏ hàng thành công"
+            msg = "Thêm vào wishlist thành công"
         self.session.modified = True
         return msg
     
