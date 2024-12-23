@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from store.views import product
+from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
 from .wishlist import Wishlist
 from store.models import Product
 from django.http import JsonResponse
@@ -17,7 +17,17 @@ def wishlist_add(request):
         product_price = str(request.POST.get('product_price'))
 
         product = get_object_or_404(Product, id=product_id)
-        msg = wishlist.add_wish(product, product_price)
+        msg = wishlist.add(product, product_price)
         
         response = JsonResponse({'msg': msg})
+        return response
+
+def wishlist_remove(request):
+    wishlist = Wishlist(request)
+    if request.POST.get('action') == 'post':
+        product_id = int(request.POST.get('product_id'))
+        wishlist.remove(product= product_id)
+
+        response = JsonResponse({'product': product_id})
+        messages.success(request, ("Xóa sản pẩm khỏi wishlist thành công"))
         return response
