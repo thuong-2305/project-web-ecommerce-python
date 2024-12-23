@@ -1,4 +1,6 @@
 from store.models import Product
+
+
 class Wishlist():
     def __init__(self, request):
         self.session = request.session
@@ -7,7 +9,7 @@ class Wishlist():
             wishlist = self.session['wishlist_session_key'] = {}
         self.wishlist = wishlist
 
-    def add_wish(self, product, price):
+    def add(self, product, price):
         product_id = str(product.id)
         product_price = str(price)
         msg = ""
@@ -18,12 +20,18 @@ class Wishlist():
             msg = "Thêm vào wishlist thành công"
         self.session.modified = True
         return msg
-    
+
+    def remove(self, product):
+        product_id = str(product.id)
+        if product_id in self.wishlist:
+            del self.wishlist[product_id]
+        self.session.modified = True
+
     def get_prods(self):
         product_ids = self.wishlist.keys()
         products = Product.objects.filter(id__in=product_ids)
         return products
-    
+
     def get_price(self):
         price = self.wishlist
         return price
